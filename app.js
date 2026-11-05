@@ -52,8 +52,9 @@
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',{maxZoom:16,attribution:'Tiles &copy; Esri &mdash; Esri, HERE, Garmin, &copy; OpenStreetMap'}).addTo(map);
     var il=[],ua=[];
     PTS.forEach(function(p){
-      var mk=L.marker([p.lat,p.lng],{icon:L.divIcon({className:'',html:'<div class="pin"></div>',iconSize:[16,16],iconAnchor:[8,8]})}).addTo(map);
-      mk.bindPopup('<b>'+p.n+'</b>'+p.d+'<br><a href="'+p.u+'">'+p.cta+' &rarr;</a>');
+      var c=p.c||1,z=c>1?Math.min(34,16+Math.round(Math.sqrt(c)*3)):16;
+      var mk=L.marker([p.lat,p.lng],{icon:L.divIcon({className:'',html:'<div class="pin'+(c>1?' pin7':'')+'" style="width:'+z+'px;height:'+z+'px">'+(c>1?'<span>'+c+'</span>':'')+'</div>',iconSize:[z,z],iconAnchor:[z/2,z/2]})}).addTo(map);
+      mk.bindPopup('<b>'+p.n+'</b>'+p.d+'<br><a href="'+p.u+'">'+p.cta+' &rarr;</a>',{maxHeight:280,maxWidth:300});
       (p.il?il:ua).push([p.lat,p.lng]);
     });
     var views={il:L.latLngBounds(il).pad(.25),ua:L.latLngBounds(ua).pad(.8)};
