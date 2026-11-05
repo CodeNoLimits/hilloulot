@@ -10,7 +10,7 @@ import os, re, shutil, sys
 
 src = os.path.abspath(sys.argv[1]); base = sys.argv[2] if len(sys.argv) > 2 else "/hilloulot"
 here = os.path.dirname(os.path.abspath(__file__))
-KEEP = {".git", "publier.py", "README.md", ".nojekyll", "CNAME"}
+KEEP = {".git", ".github", "publier.py", "README.md", ".nojekyll", "CNAME"}  # .github : publication par GitHub Actions (05/11)
 TOP = "fr/|he/|en/|img/|audio/|videos/|app\\.js|style\\.css|favicon\\.svg"
 pat = re.compile(r'(["\'=(])/(' + TOP + ')')
 
