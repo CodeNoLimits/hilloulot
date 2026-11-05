@@ -771,3 +771,6 @@ main .h3{font:500 clamp(24px,3vw,30px)/1.2 var(--serif);color:var(--ivory);margi
 @media (prefers-reduced-motion:reduce){.gm7,.gd7,.cdl b{animation:none}.cdl b{opacity:1}}
 .gm7{filter:brightness(1.9) saturate(1.15);box-shadow:inset -9px -6px 14px rgba(0,0,0,.55),inset 4px 3px 9px rgba(255,230,170,.28),0 0 0 1px rgba(201,164,92,.55),0 0 26px rgba(233,205,143,.45)}
 [dir=ltr] .f7h .tzh{text-align:left}
+@media (max-width:760px){.gph7.hero.h7 .in{padding-block:88px 18px}.gph7.hero.h7 h1{font-size:32px;margin:10px 0 4px}.gph7 .lead{display:none}.gph7 .gv7{gap:6px;margin-top:12px}.gph7 .gv7 button{padding:6px 11px;font-size:13.5px}.gwrap7{height:66vh;min-height:420px}}
+.gd7{box-shadow:0 0 7px 1px rgba(246,214,144,.55);animation-name:gd7b}
+@keyframes gd7b{50%{box-shadow:0 0 11px 2px rgba(246,214,144,.75)}}
