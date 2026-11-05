@@ -774,3 +774,9 @@ main .h3{font:500 clamp(24px,3vw,30px)/1.2 var(--serif);color:var(--ivory);margi
 @media (max-width:760px){.gph7.hero.h7 .in{padding-block:88px 18px}.gph7.hero.h7 h1{font-size:32px;margin:10px 0 4px}.gph7 .lead{display:none}.gph7 .gv7{gap:6px;margin-top:12px}.gph7 .gv7 button{padding:6px 11px;font-size:13.5px}.gwrap7{height:66vh;min-height:420px}}
 .gd7{box-shadow:0 0 7px 1px rgba(246,214,144,.55);animation-name:gd7b}
 @keyframes gd7b{50%{box-shadow:0 0 11px 2px rgba(246,214,144,.75)}}
+/* revue mobile 05/11 : lisibilité et cibles tactiles */
+.mk,.evc,.j,.tv,.cd span{font-size:12px!important}
+.mnav a{font-size:11.5px!important;letter-spacing:.01em!important}
+.t7{position:relative}.t7 .tzn a:after{content:"";position:absolute;inset:0}
+.t7:hover{background:var(--n1)}
+.langs a,.lang a{min-height:36px;display:inline-flex;align-items:center}
