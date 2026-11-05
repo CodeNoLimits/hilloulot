@@ -148,7 +148,7 @@
     var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
     var li=function(e){var b='<span class="evc">'+esc(L[e.c]||e.c)+'</span>'+(e.u?'<a href="'+e.u+'">'+esc(e.t)+'</a>':'<span class="evt">'+esc(e.t)+'</span>')+(e.pl?'<em>'+esc(e.pl)+'</em>':'')+(e.v?'':'<small class="tv">'+esc(TV)+'</small>')+(e.pc?'<small class="pcn">'+esc(e.pc)+'</small>':'');return '<li class="ev c-'+e.c+(e.i?' wi':'')+'" data-c="'+e.c+'">'+(e.i?'<img class="evth" src="/hilloulot/img/th/'+e.i+'.webp" alt="" width="44" height="55" loading="lazy" decoding="async"><div>'+b+'</div>':b)+'</li>'};
     var civ=function(d,o){return new Intl.DateTimeFormat(loc,Object.assign({timeZone:'UTC'},o||{weekday:'long',day:'numeric',month:'long',year:'numeric'})).format(new Date(d+'T12:00:00Z'))};
-    fetch('/hilloulot/'+lang+'/hilloulot/days.json').then(function(r){return r.json()}).then(function(D){
+    fetch('/hilloulot/'+lang+'/days.json').then(function(r){return r.json()}).then(function(D){
       var day=D[iso]; if(!day)return;
       var h=document.querySelector('#thd,[data-today-hd]'); if(h&&day.h)h.textContent=day.h;
       var c=document.querySelector('#tciv,[data-today-civ]'); if(c)c.textContent=civ(iso);
