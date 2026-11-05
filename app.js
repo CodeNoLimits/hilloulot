@@ -157,7 +157,7 @@
       document.querySelectorAll('.bigcandle').forEach(function(b){b.dataset.slug='jour-'+iso;var on=ls('bougie-jour-'+iso)==='1';b.classList.toggle('on',on);b.querySelector('.lb').textContent=on?b.dataset.on:b.dataset.off});
       var wk=document.getElementById('tweek'); if(wk){var out='',d=new Date(iso+'T12:00:00Z');
         for(var i=1;i<=7;i++){var k=new Date(+d+i*864e5).toISOString().slice(0,10),x=D[k];if(!x)continue;
-          out+='<li class="rv"><h3>'+esc(x.h||'')+'<small>'+esc(civ(k))+'</small></h3><ul class="evs">'+(x.e.length?x.e.slice(0,3).map(li).join('')+(x.e.length>3?'<li class="ev more"><a href="/'+lang+'/calendar/">+ '+(x.e.length-3)+'</a></li>':''):'<li class="ev none">'+esc(list.dataset.none||'')+'</li>')+'</ul></li>'}
+          out+='<li class="rv"><h3>'+esc(x.h||'')+'<small>'+esc(civ(k))+'</small></h3><ul class="evs">'+(x.e.length?x.e.slice(0,3).map(li).join('')+(x.e.length>3?'<li class="ev more"><a href="/hilloulot/'+lang+'/calendar/">+ '+(x.e.length-3)+'</a></li>':''):'<li class="ev none">'+esc(list.dataset.none||'')+'</li>')+'</ul></li>'}
         wk.innerHTML=out; window.__watchRv?window.__watchRv():wk.querySelectorAll('.rv').forEach(function(e){e.classList.add('in')}) }
     }).catch(function(){});
   }

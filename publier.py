@@ -27,6 +27,7 @@ for dp, _, files in os.walk(src):
             s = open(os.path.join(dp, f), encoding="utf-8").read()
             s = pat.sub(lambda m: m.group(1) + base + "/" + m.group(2), s)
             s = s.replace("fetch('/'+lang", "fetch('" + base + "/'+lang")
+            s = s.replace("href=\"/'+lang", "href=\"" + base + "/'+lang")  # lien « +N » de la page Aujourd'hui (app.js)
             open(out, "w", encoding="utf-8").write(s)
         else:
             shutil.copy2(os.path.join(dp, f), out)
