@@ -225,3 +225,47 @@
     if(/^https?:/.test(to)){var fd=new FormData();fd.append('email',em);fd.append('rythme',r);fd.append('langue',document.documentElement.lang);fetch(to,{method:'POST',body:fd,headers:{Accept:'application/json'}}).then(ok).catch(ok)}
     else{location.href='mailto:'+to+'?subject='+encodeURIComponent('Hilloulot — '+r)+'&body='+encodeURIComponent(em+' · '+r);ok()}});
 })();
+
+/* v7 reperes */
+/* v7 : repères du calendrier en haut de l'accueil (Shabbat, Roch Hodech, prochaine fête) — demande de Mickaël, 06/11/2026.
+   Dates : /fr/days.json (calendrier vérifié du site, jours civils) ; noms : days.json de la langue de la page. */
+(function(){
+  var box=document.querySelector('[data-rep7]'); if(!box||!window.fetch)return;
+  var l=document.documentElement.lang, loc=window.LOCALE||l;
+  var S={
+    fr:{sh:'Shabbat',tonight:'Ce soir',today:'Aujourd’hui',fri:'Vendredi {d} au soir',rh:'Roch Hodech',one:'1 jour',two:'2 jours',eve:'dès {d} soir',eve0:'dès ce soir',fete:'Prochaine fête',inN:'dans {n} jours',tom:'demain',and:' et '},
+    en:{sh:'Shabbat',tonight:'Tonight',today:'Today',fri:'Friday {d}, evening',rh:'Rosh Chodesh',one:'1 day',two:'2 days',eve:'from {d} evening',eve0:'from this evening',fete:'Next festival',inN:'in {n} days',tom:'tomorrow',and:' and '},
+    he:{sh:'שבת',tonight:'הערב',today:'היום',fri:'יום שישי בערב, {d}',rh:'ראש חודש',one:'ראש חודש בן יום אחד',two:'ראש חודש בן יומיים',eve:'מתחיל ב{d} בערב',eve0:'מתחיל הערב',fete:'החג הבא',inN:'בעוד {n} ימים',tom:'מחר',and:' ו'}
+  }[l]||null; if(!S)return;
+  var t=function(k,v){return S[k].replace(/\{(\w)\}/g,function(_,x){return v[x]})};
+  var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+  var iso=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jerusalem'}).format(new Date());
+  var add=function(k,n){return new Date(Date.parse(k+'T12:00:00Z')+n*864e5).toISOString().slice(0,10)};
+  var fmt=function(k,o){return new Intl.DateTimeFormat(loc,Object.assign({timeZone:'UTC'},o)).format(new Date(k+'T12:00:00Z'))};
+  var wd=function(k){return fmt(k,{weekday:'long'})}, dm=function(k){return fmt(k,{weekday:'long',day:'numeric',month:'long'})};
+  var veille=function(k){var v=add(k,-1);return v===iso?S.eve0:t('eve',{d:wd(v)})};
+  var dans=function(n){return n===1?S.tom:n===2&&l==='he'?'בעוד יומיים':t('inN',{n:n})};
+  var ev=function(D,k,c){return ((D[k]||{}).e||[]).filter(function(e){return e.c===c})[0]};
+  var card=function(kick,title,sub,cls){return '<li class="r7 '+cls+'"><small>'+esc(kick)+'</small><b>'+esc(title)+'</b>'+[].concat(sub).map(function(x){return '<span>'+esc(x)+'</span>'}).join('')+'</li>'};
+  Promise.all([fetch('/hilloulot/fr/days.json').then(function(r){return r.json()}),l==='fr'?null:fetch('/'+l+'/days.json').then(function(r){return r.json()})]).then(function(R){
+    var F=R[0], L=R[1]||F, out='', i, k;
+    // Shabbat
+    var dow=new Date(iso+'T12:00:00Z').getUTCDay();
+    if(dow===5)out+=card(S.sh,S.tonight,dm(iso),'r7on');
+    else if(dow===6)out+=card(S.sh,S.today,dm(iso),'r7on');
+    else{var fr=add(iso,5-dow);out+=card(S.sh,t('fri',{d:fmt(fr,{day:'numeric',month:'long'})}),dans(5-dow),'')}
+    // Roch Hodech : 1 ou 2 jours (le 2e jour peut être aujourd'hui)
+    for(i=0;i<70;i++){k=add(iso,i);if(ev(F,k,'roch_hodech'))break}
+    if(i<70){var a=k; if(i===0&&ev(F,add(k,-1),'roch_hodech'))a=add(k,-1);
+      var b=ev(F,add(a,1),'roch_hodech')?add(a,1):a, nm=(ev(L,a,'roch_hodech')||ev(F,a,'roch_hodech')).t;
+      var days=a===b?dm(a):l==='he'?(a.slice(5,7)===b.slice(5,7)?'ימי '+wd(a).replace('יום ','')+' ו'+wd(b).replace('יום ','')+', '+fmt(a,{day:'numeric'})+' ו־'+fmt(b,{day:'numeric',month:'long'}):dm(a)+' ו'+dm(b)):fmt(a,{weekday:'long',day:'numeric'})+S.and+dm(b);
+      var when=iso>=a?S.today+' · '+(a===b?S.one:S.two):(a===b?S.one:S.two)+' · '+veille(a);
+      out+=card(S.rh,nm.replace(/^(Roch Hodech|Rosh Chodesh|ראש חודש)\s*/,''),[days,when],iso>=a?'r7on':'')}
+    // prochaine fête (date du premier jour, elle commence la veille au soir)
+    // une « veille de » n'est pas la fête : on prend le premier vrai jour
+    for(i=0;i<400;i++){k=add(iso,i);var f0=ev(F,k,'fete');if(f0&&!/^Veille/.test(f0.t))break}
+    if(i<400){var e=ev(L,k,'fete')||f0, n=e.t.split(/\s*[(:—]\s*/)[0];
+      out+=card(S.fete,n,i===0?[S.today,dm(k)]:[dm(k),veille(k)+' · '+dans(i)],i===0?'r7on':'')}
+    box.innerHTML=out; box.hidden=false;
+  }).catch(function(){});
+})();
