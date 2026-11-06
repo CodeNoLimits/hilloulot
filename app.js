@@ -231,7 +231,7 @@
    Dates : /fr/days.json (calendrier vérifié du site, jours civils) ; noms : days.json de la langue de la page. */
 (function(){
   var box=document.querySelector('[data-rep7]'); if(!box||!window.fetch)return;
-  var l=document.documentElement.lang, loc=window.LOCALE||l;
+  var lang=document.documentElement.lang, l=lang, loc=window.LOCALE||l;
   var S={
     fr:{sh:'Shabbat',tonight:'Ce soir',today:'Aujourd’hui',fri:'Vendredi {d} au soir',rh:'Roch Hodech',one:'1 jour',two:'2 jours',eve:'dès {d} soir',eve0:'dès ce soir',fete:'Prochaine fête',inN:'dans {n} jours',tom:'demain',and:' et '},
     en:{sh:'Shabbat',tonight:'Tonight',today:'Today',fri:'Friday {d}, evening',rh:'Rosh Chodesh',one:'1 day',two:'2 days',eve:'from {d} evening',eve0:'from this evening',fete:'Next festival',inN:'in {n} days',tom:'tomorrow',and:' and '},
@@ -247,7 +247,7 @@
   var dans=function(n){return n===1?S.tom:n===2&&l==='he'?'בעוד יומיים':t('inN',{n:n})};
   var ev=function(D,k,c){return ((D[k]||{}).e||[]).filter(function(e){return e.c===c})[0]};
   var card=function(kick,title,sub,cls){return '<li class="r7 '+cls+'"><small>'+esc(kick)+'</small><b>'+esc(title)+'</b>'+[].concat(sub).map(function(x){return '<span>'+esc(x)+'</span>'}).join('')+'</li>'};
-  Promise.all([fetch('/hilloulot/fr/days.json').then(function(r){return r.json()}),l==='fr'?null:fetch('/'+l+'/days.json').then(function(r){return r.json()})]).then(function(R){
+  Promise.all([fetch('/hilloulot/fr/days.json').then(function(r){return r.json()}),l==='fr'?null:fetch('/hilloulot/'+lang+'/days.json').then(function(r){return r.json()})]).then(function(R){
     var F=R[0], L=R[1]||F, out='', i, k;
     // Shabbat
     var dow=new Date(iso+'T12:00:00Z').getUTCDay();
