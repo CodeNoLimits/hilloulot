@@ -777,6 +777,8 @@ main .h3{font:500 clamp(24px,3vw,30px)/1.2 var(--serif);color:var(--ivory);margi
 /* revue mobile 05/11 : lisibilité et cibles tactiles */
 .mk,.evc,.j,.tv,.cd span{font-size:12px!important}
 .mnav a{font-size:11.5px!important;letter-spacing:.01em!important}
+/* 12/11 : largeur selon le mot (avant : six cases égales, « Aujourd’hui » touchait « Tsadikim » à 360 px) */
+.mnav a{flex:1 1 auto!important;white-space:nowrap;padding-inline:4px!important}
 .t7{position:relative}.t7 .tzn a:after{content:"";position:absolute;inset:0}
 .t7:hover{background:var(--n1)}
 .langs a,.lang a{min-height:36px;display:inline-flex;align-items:center}
@@ -802,3 +804,28 @@ main .h3{font:500 clamp(24px,3vw,30px)/1.2 var(--serif);color:var(--ivory);margi
 [dir=rtl] .r7 b,[dir=rtl] .r7 span{font-family:var(--hebsans)}
 [dir=rtl] .r7 small{letter-spacing:0;font-size:12.5px}
 @media (max-width:640px){.rep7{grid-template-columns:1fr;gap:6px}.r7{padding:9px 12px;gap:2px}.r7 b{font-size:17px}.r7 span{font-size:13px}}
+/* 12/11 : sur téléphone la fiche d'un lieu s'ouvrait sous la barre du bas, et hors écran à 360×600 : elle se fixe au-dessus de la barre */
+@media (max-width:760px){.gp7{position:fixed;inset:auto 10px calc(74px + env(safe-area-inset-bottom,0px));max-height:52vh}}
+/* les points reçoivent du moteur 3D un z-index allant jusqu'à plusieurs dizaines : le z-index 10 du 06/11 ne suffisait pas (aveu n° 4, récidive constatée le 12/11) */
+.gp7{z-index:100000!important}
+/* ===== 12/11 : passe unique après la note du juré (7/10) ===== */
+/* bougies des bandeaux : la boîte était plus basse que la plus haute bougie (92 px pour 96 + la flamme), d'où les flammes rognées et la bande rectangulaire */
+.hero .candles.hc{height:210px}
+@media (max-width:760px){.hero .candles.hc{height:180px}}
+/* sur ordinateur les bougies chevauchaient le compte à rebours : elles prennent la moitié libre du bandeau */
+@media (min-width:761px){.hero .candles.hc{inset-inline-start:56%;gap:clamp(12px,2vw,30px)}}
+/* téléphone : un voile sous la barre du bas, pour que le texte ne se lise plus à travers */
+@media (max-width:760px){.mnav:before{content:"";position:absolute;inset:-40px -12px -12px;z-index:-1;pointer-events:none;background:linear-gradient(180deg,rgba(4,5,10,0),rgba(4,5,10,.9) 46%,#04050a)}}
+/* calendrier et page Aujourd'hui sur téléphone : étiquette à gauche, nom, lieu et « à vérifier » alignés à droite, toujours dans le même ordre */
+@media (max-width:760px){
+  .ev:not(.wi):not(.none):not(.more){display:grid;grid-template-columns:fit-content(44%) minmax(0,1fr);gap:4px 12px;align-items:baseline}
+  .ev:not(.wi) .evc{white-space:normal;line-height:1.3}.ev .evt,.ev a{overflow-wrap:anywhere;min-width:0}  /* une longue étiquette (« Nevi’im-Ketouvim ») poussait le nom hors de l'écran à 360 px */
+  .ev:not(.wi):not(.none):not(.more)>*{grid-column:2;justify-self:start}
+  .ev:not(.wi):not(.none):not(.more)>.evc{grid-column:1;grid-row:1;transform:none}
+  .ev:not(.wi) em{padding-inline-start:0}
+}
+.tv{border-style:solid;border-color:rgba(215,154,106,.32)}
+/* titres hébreux : même serif que l'ouverture, en graisse normale (la graisse 300 se lisait comme une linéale fine) */
+[dir=rtl] .hero h1,[dir=rtl] .h2,[dir=rtl] .card h3,[dir=rtl] .tcard h3{font-family:var(--heb);font-weight:400}
+/* page Aujourd'hui sur téléphone : les deux boutons à la même largeur */
+@media (max-width:760px){.bigcandle#bigc,.btn.subcta{display:flex;width:100%;box-sizing:border-box;margin-inline:0}.btn.subcta{justify-content:center}}

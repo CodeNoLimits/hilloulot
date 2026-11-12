@@ -1,6 +1,21 @@
 (function(){
   var I=window.I18N||{};
   var pad=function(n){return String(n).padStart(2,'0')};
+  // 12/11 : site statique, donc si la hilloula du bandeau d'accueil est passee on affiche la suivante
+  (function(){
+    var hero=document.querySelector('.hero[data-nexts]'); if(!hero)return;
+    try{
+      var cd=hero.querySelector('[data-cd]'), now=Date.now();
+      var x=JSON.parse(hero.dataset.nexts).filter(function(n){return Date.parse(n.c)+864e5>now})[0];
+      if(!x||!cd||cd.dataset.cd===x.c)return;
+      var q=function(s){return hero.querySelector(s)}, sp=hero.querySelectorAll('.meta span');
+      q('h1').textContent=x.n; if(q('.hn'))q('.hn').textContent=x.h;
+      if(sp[0])sp[0].innerHTML='<b></b>',sp[0].firstChild.textContent=x.d; if(sp[1])sp[1].textContent=x.v; if(sp[2])sp[2].textContent=x.p;
+      cd.dataset.cd=x.c; cd.setAttribute('aria-label',x.v); if(q('.eve'))q('.eve').textContent=x.e;
+      var b=q('.acts .btn'), u=b&&b.getAttribute('href').replace(/[^\/]+\/$/,x.s+'/');  // meme prefixe que le lien d'origine (le site vit sous /hilloulot/ en ligne)
+      if(u){b.setAttribute('href',u); if(q('.acts .lnk'))q('.acts .lnk').setAttribute('href',u+'#acces')}
+    }catch(e){}
+  })();
   // compte a rebours
   function tick(){
     var now=Date.now();
@@ -15,6 +30,7 @@
     var now=Date.now();
     document.querySelectorAll('[data-t]').forEach(function(el){
       var ms=Date.parse(el.dataset.t)-now, n=Math.ceil(ms/864e5);
+      if(ms<=-864e5){el.hidden=true;return}  // date passee : pas de « Dans -3 jours »
       el.textContent = ms<=0&&ms>-864e5?I.today : n===1?I.tomorrow : (I.inDays||'{n}').replace('{n}',n);
     });
   }
