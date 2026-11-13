@@ -829,3 +829,7 @@ main .h3{font:500 clamp(24px,3vw,30px)/1.2 var(--serif);color:var(--ivory);margi
 [dir=rtl] .hero h1,[dir=rtl] .h2,[dir=rtl] .card h3,[dir=rtl] .tcard h3{font-family:var(--heb);font-weight:400}
 /* page Aujourd'hui sur téléphone : les deux boutons à la même largeur */
 @media (max-width:760px){.bigcandle#bigc,.btn.subcta{display:flex;width:100%;box-sizing:border-box;margin-inline:0}.btn.subcta{justify-content:center}}
+
+/* 13/11/2026 : étiquettes de travail (« à vérifier ») jamais visibles du public, la donnée reste dans le HTML ; en-tête plein au défilement */
+.tv,.tvb{display:none!important}
+.hdr.solid{background:#06080f;-webkit-backdrop-filter:none;backdrop-filter:none}
