@@ -285,3 +285,67 @@
     box.innerHTML=out; box.hidden=false;
   }).catch(function(){});
 })();
+
+/* v7 accueil */
+/* Recherche par nom : français, anglais, hébreu, translittérations (23/11/2026, demande de David). Même code à la construction et dans le navigateur. */
+var R7=(function(){
+  var VIDE=/^(rabbi|rabi|rav|rabenou|rebbe|reb|r|le|la|de|du|des|of|the|ben|bar|bat|fils|son|tsadik|tzadik|tsaddik|tzaddik|saint|רבי|רב|הרב|ר|בן|בר|רבנו|רבינו|האדמור|אדמור)$/;
+  function mots(s){return String(s).normalize('NFD').replace(/[\u0300-\u036f\u0591-\u05c7'’‘`"״׳“”]/g,'').toLowerCase().replace(/[^a-z\u05d0-\u05ea0-9]+/g,' ').trim().split(' ').filter(Boolean)}
+  function plie(w){
+    if(/[א-ת]/.test(w))return w.replace(/ך/g,'כ').replace(/ם/g,'מ').replace(/ן/g,'נ').replace(/ף/g,'פ').replace(/ץ/g,'צ').replace(/יי/g,'י').replace(/וו/g,'ו');
+    return w.replace(/tch|tsch/g,'h').replace(/tz|zz/g,'ts').replace(/sch|sh|ch|kh/g,'h').replace(/ph/g,'f').replace(/ck|q/g,'k').replace(/th/g,'t').replace(/gu(?=[ei])/g,'g').replace(/ou|oo/g,'u').replace(/dj|dg/g,'g').replace(/j|y/g,'i').replace(/w/g,'v').replace(/ai|ei|ay|ey/g,'a').replace(/é|e(?=$)/g,'').replace(/(.)\1+/g,'$1').replace(/h$/,'');
+  }
+  var os=function(w){return w.replace(/[aeiou]/g,'')};
+  function cle(s){return mots(s).filter(function(w){return !VIDE.test(w)}).map(plie).filter(Boolean)}
+  function lev1(a,b){if(Math.abs(a.length-b.length)>1)return false;for(var i=0;i<a.length&&a[i]===b[i];)i++;var x=a.slice(i),y=b.slice(i);return x.slice(1)===y.slice(1)||x===y.slice(1)||x.slice(1)===y}
+  function tok(q,ks){var m=9;for(var i=0;i<ks.length;i++){var k=ks[i];
+    if(k===q)m=Math.min(m,0);else if(k.indexOf(q)===0)m=Math.min(m,1);
+    else if(/^[ולהבמש]/.test(k)&&k.slice(1).indexOf(q)===0)m=Math.min(m,1);
+    else if(q.length>3&&k.indexOf(q)>0)m=Math.min(m,3);
+    else if(q.length>3&&lev1(q,k))m=Math.min(m,4);
+    else if(!/[א-ת]/.test(q)&&os(q).length>2&&os(q)===os(k))m=Math.min(m,5)}
+    return m}
+  function note(qs,ks){var t=0;for(var i=0;i<qs.length;i++){var x=tok(qs[i],ks);if(x===9)return -1;t+=x}return t}
+  return {cle:cle,note:note};
+})();
+/* Accueil : hiloula du jour hébreu en cours (dès le coucher du soleil à Jérusalem) + recherche par nom. 23/11/2026, demande de David. */
+(function(){
+  var hero=document.querySelector('.hero[data-nexts]'); if(!hero||!window.fetch)return;
+  var L=document.documentElement.lang,T={fr:{jour:'Hiloula du jour',venir:'À venir',aussi:'Aussi aujourd’hui',rien:'Aucune hiloula dans la liste aujourd’hui.',fiche:'Voir la fiche'},en:{jour:'Hilloula of the day',venir:'Coming up',aussi:'Also today',rien:'No hilloula in the list today.',fiche:'See the page'},he:{jour:'הילולת היום',venir:'ההילולה הקרובה',aussi:'עוד הילולות היום',rien:'אין הילולות היום',fiche:'לדף המלא'}}[L]; if(!T)return;
+  var q=function(s){return hero.querySelector(s)};
+  // coucher du soleil à Jérusalem (équations NOAA), en heure universelle
+  function coucher(iso){var d=new Date(iso+'T12:00:00Z'),n=Math.floor((d-Date.UTC(d.getUTCFullYear(),0,0))/864e5),g=2*Math.PI/365*(n-1+.25),eq=229.18*(.000075+.001868*Math.cos(g)-.032077*Math.sin(g)-.014615*Math.cos(2*g)-.040849*Math.sin(2*g)),de=.006918-.399912*Math.cos(g)+.070257*Math.sin(g)-.006758*Math.cos(2*g)+.000907*Math.sin(2*g)-.002697*Math.cos(3*g)+.00148*Math.sin(3*g),la=31.778*Math.PI/180,ha=Math.acos(Math.cos(90.833*Math.PI/180)/(Math.cos(la)*Math.cos(de))-Math.tan(la)*Math.tan(de))*180/Math.PI;return Date.parse(iso+'T00:00:00Z')+(720-4*(35.235-ha)-eq)*6e4}
+  var sim=(location.search.match(/[?&]sim=([\dT:+Z.-]+)/)||[])[1],now=sim?Date.parse(decodeURIComponent(sim)):Date.now();
+  var iso=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jerusalem'}).format(new Date(now));
+  if(now>=coucher(iso))iso=new Date(Date.parse(iso+'T12:00:00Z')+864e5).toISOString().slice(0,10);
+  var E=function(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+  var civ=function(i){return new Intl.DateTimeFormat({fr:'fr-FR',en:'en-GB',he:'he-IL'}[L],{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(i+'T12:00:00Z'))};
+  fetch(hero.dataset.hil).then(function(r){return r.json()}).then(function(H){
+    var jour=H.filter(function(x){return x.i===iso}).sort(function(a,b){return b.s-a.s}),suite=H.filter(function(x){return x.i>iso}).sort(function(a,b){return a.i<b.i?-1:a.i>b.i?1:b.s-a.s})[0];
+    var x=jour[0]||suite; if(!x)return;
+    var h1=q('h1'),sp=hero.querySelectorAll('.meta span'),b=q('.acts .btn'),ln=q('.acts .lnk'),k=q('.kick');
+    h1.textContent=x.n;h1.removeAttribute('aria-label');h1.classList.remove('st','st-on'); if(q('.hn'))q('.hn').textContent=L==='he'?'':x.h;
+    k.textContent=jour.length?T.jour:T.venir;
+    if(sp[0])sp[0].innerHTML='<b></b>',sp[0].firstChild.textContent=x.d; if(sp[1])sp[1].textContent=civ(x.i); if(sp[2])sp[2].textContent=x.p||'';
+    if(b){b.href=x.u;b.firstChild.nodeValue=x.f?b.firstChild.nodeValue:T.fiche} if(ln){ln.href=x.u+'#acces';ln.hidden=!x.f}
+    var cd=q('[data-cd]'),eve=q('.eve');
+    if(jour.length){hero.classList.add('jour7');if(cd)cd.hidden=true;if(eve)eve.hidden=true}
+    else{if(cd)cd.dataset.cd=x.i+'T00:00:00+02:00';if(eve)eve.textContent=T.rien}
+    var ul=E('ul','au7');
+    if(jour.length>1){var li=E('li','au7t',T.aussi);ul.appendChild(li);jour.slice(1,5).forEach(function(y){var l=E('li'),a=E('a','',y.n);a.href=y.u;l.appendChild(a);ul.appendChild(l)})}
+    if(jour.length&&suite){var s=E('li','au7s');s.appendChild(E('span','',T.venir+' · '+suite.d.replace(/ 5787| תשפ״ז/,'')+' '));var sa=E('a','',suite.n);sa.href=suite.u;s.appendChild(sa);ul.appendChild(s)}
+    var vieux=q('.au7');if(vieux)vieux.remove(); if(ul.children.length)q('.acts').insertAdjacentElement('afterend',ul);
+  }).catch(function(){});
+  // recherche
+  var f=document.querySelector('[data-rc7]');if(!f)return;var inp=f.querySelector('input'),ul=f.querySelector('ul'),D=null,act=-1,cur=[];
+  function charge(){return D?Promise.resolve(D):fetch(hero.dataset.hil).then(function(r){return r.json()}).then(function(H){H.forEach(function(x){x.c=R7.cle(x.k)});return D=H})}
+  function montre(){var qs=R7.cle(inp.value);if(!inp.value.trim()||!qs.length){ul.hidden=true;inp.setAttribute('aria-expanded','false');return}
+    charge().then(function(H){var r=H.map(function(x){return [R7.note(qs,x.c),x]}).filter(function(x){return x[0]>=0}).sort(function(a,b){return a[0]-b[0]||b[1].s-a[1].s}).slice(0,8);cur=r.map(function(x){return x[1]});act=-1;ul.textContent='';
+      if(!cur.length){ul.appendChild(E('li','rc7v',f.dataset.vide))}
+      cur.forEach(function(x,i){var l=E('li');l.id='rc7-'+i;l.setAttribute('role','option');var a=E('a');a.href=x.u;a.tabIndex=-1;if(x.t){var im=E('img');im.src=x.t;im.alt='';im.width=44;im.height=44;a.appendChild(im)}else{a.appendChild(E('i'))}var d=E('span');d.appendChild(E('b','',x.n));d.appendChild(E('small','',x.d.replace(/ 5787| תשפ״ז/,'')+(x.p?' · '+x.p:'')));a.appendChild(d);l.appendChild(a);ul.appendChild(l)});
+      ul.hidden=false;inp.setAttribute('aria-expanded','true')})}
+  inp.addEventListener('focus',charge);inp.addEventListener('input',montre);
+  inp.addEventListener('keydown',function(e){var n=cur.length;if(e.key==='ArrowDown'||e.key==='ArrowUp'){if(!n)return;e.preventDefault();act=(act+(e.key==='ArrowDown'?1:n-1)+(act<0&&e.key==='ArrowUp'?1:0))%n;[].forEach.call(ul.children,function(l,i){l.classList.toggle('on',i===act);l.setAttribute('aria-selected',i===act)});inp.setAttribute('aria-activedescendant','rc7-'+act)}else if(e.key==='Escape'){ul.hidden=true;inp.setAttribute('aria-expanded','false')}});
+  f.addEventListener('submit',function(e){e.preventDefault();if(!inp.value.trim())return;charge().then(function(){montre();setTimeout(function(){var x=cur[Math.max(act,0)];if(x)location.href=x.u},60)})});
+  document.addEventListener('click',function(e){if(!f.contains(e.target))ul.hidden=true});
+})();
