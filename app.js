@@ -1,4 +1,4 @@
-window.NOM7='tsadik';
+window.NOM7='tsadikim';
 (function(){
   var I=window.I18N||{};
   var pad=function(n){return String(n).padStart(2,'0')};
@@ -240,7 +240,7 @@ window.NOM7='tsadik';
     if(!to||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){f.email.focus();return}
     var ok=function(){f.querySelector('.subok').hidden=false};
     if(/^https?:/.test(to)){var fd=new FormData();fd.append('email',em);fd.append('rythme',r);fd.append('langue',document.documentElement.lang);fetch(to,{method:'POST',body:fd,headers:{Accept:'application/json'}}).then(ok).catch(ok)}
-    else{location.href='mailto:'+to+'?subject='+encodeURIComponent('Tsadik — '+r)+'&body='+encodeURIComponent(em+' · '+r);ok()}});
+    else{location.href='mailto:'+to+'?subject='+encodeURIComponent('Tsadikim — '+r)+'&body='+encodeURIComponent(em+' · '+r);ok()}});
 })();
 
 /* v7 reperes */
