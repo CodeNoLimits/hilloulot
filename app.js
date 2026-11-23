@@ -386,6 +386,46 @@ var R7=(function(){
   // logo
   if(br){var nom=P==='a'?'tefi.la':'tsadik.live';br.setAttribute('aria-label',nom);br.textContent='';var sp=document.createElement('span');sp.className='lg7';sp.textContent=nom;br.appendChild(sp);window.__logo7={el:br,nom:nom,p:P,rm:rm}}
 })();
+
+// Bougies : rangée filmée dans les bandeaux, bougie à allumer sur chaque fiche (compteur gardé par hilloulot.dreamnovamcp.com), son au toucher seulement.
+(function(){
+var B='/hilloulot/img/bougie/',API='https://hilloulot.dreamnovamcp.com/bougie',L=document.documentElement.lang||'fr',RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+var T={fr:{a:'Allumer une bougie',o:'Votre bougie est allumée',z:'Allumez la première bougie',n:function(n){return n===1?'1 personne a allumé une bougie':n.toLocaleString('fr')+' personnes ont allumé une bougie'},p:'Vous êtes la première personne à allumer une bougie ici',s:'Partager',c:'Lien copié',t:'J’ai allumé une bougie pour '},
+en:{a:'Light a candle',o:'Your candle is lit',z:'Light the first candle',n:function(n){return n===1?'1 person has lit a candle':n.toLocaleString('en')+' people have lit a candle'},p:'You are the first to light a candle here',s:'Share',c:'Link copied',t:'I lit a candle for '},
+he:{a:'הדליקו נר',o:'הנר שלכם דולק',z:'עדיין לא הודלק כאן נר. היו הראשונים להדליק',n:function(n){return n===1?'אדם אחד הדליק נר':n===2?'שני אנשים הדליקו נר':n.toLocaleString('he')+' אנשים הדליקו נר'},p:'אתם הראשונים להדליק כאן נר',s:'שיתוף',c:'הקישור הועתק',t:'הדלקתי נר לכבוד '}}[L]||null;if(!T)return;
+function g(k){try{return localStorage.getItem(k)}catch(e){return null}}function p(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function E(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x)e.textContent=x;return e}
+function vid(src,poster,c){var v=E('video',c);v.muted=true;v.defaultMuted=true;v.playsInline=true;v.setAttribute('playsinline','');v.preload='none';v.poster=poster;v.src=src;v.setAttribute('aria-hidden','true');v.tabIndex=-1;return v}
+var io='IntersectionObserver'in window?new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var q=e.target.play();q&&q.catch(function(){})}else e.target.pause()})}):null;
+function boucle(v){v.loop=true;if(io)io.observe(v);else v.autoplay=true}
+// rangée filmée
+document.querySelectorAll('.candles.hc,.candles.icdl').forEach(function(c){c.textContent='';c.classList.add('ra7');if(RM){var i=E('img');i.src=B+'rangee.webp';i.alt='';c.appendChild(i)}else{var v=vid(B+'rangee.mp4',B+'rangee.webp');c.appendChild(v);boucle(v)}});
+// son : souffle d'allumage, et deux notes douces pour la première personne
+var AC;function son(premier){try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();AC.resume();var t=AC.currentTime+.02,n=AC.sampleRate*.9|0,b=AC.createBuffer(1,n,AC.sampleRate),d=b.getChannelData(0);for(var i=0;i<n;i++)d[i]=(Math.random()*2-1);
+var s=AC.createBufferSource(),f=AC.createBiquadFilter(),a=AC.createGain();s.buffer=b;f.type='bandpass';f.Q.value=.8;f.frequency.setValueAtTime(260,t);f.frequency.exponentialRampToValueAtTime(1500,t+.16);f.frequency.exponentialRampToValueAtTime(380,t+.85);a.gain.setValueAtTime(.0001,t);a.gain.exponentialRampToValueAtTime(.16,t+.09);a.gain.exponentialRampToValueAtTime(.0001,t+.85);s.connect(f);f.connect(a);a.connect(AC.destination);s.start(t);
+(premier?[523.25,659.25,783.99,1046.5]:[]).forEach(function(h,i){var o=AC.createOscillator(),k=AC.createGain(),u=t+.35+i*.15;o.type='sine';o.frequency.value=h;k.gain.setValueAtTime(.0001,u);k.gain.exponentialRampToValueAtTime(.07,u+.02);k.gain.exponentialRampToValueAtTime(.0001,u+1.5);o.connect(k);k.connect(AC.destination);o.start(u);o.stop(u+1.6)})}catch(e){}}
+window.__son7=son;
+function objet(allumee){var o=E('span','ob7');var i0=E('img','b0');i0.src=B+'bougie_0.webp';i0.alt='';var i1=E('img','b1');i1.src=B+'bougie_1.webp';i1.alt='';o.append(i0,i1);var va,vb;
+ function flamme(){if(RM)return;if(!vb){vb=vid(B+'bougie_b.mp4',B+'bougie_1.webp','vb');o.appendChild(vb);boucle(vb)}}
+ o.allume=function(anime){if(anime&&!RM){va=vid(B+'bougie_a.mp4',B+'bougie_0.webp','va');o.appendChild(va);flamme();o.classList.add('va7');va.onended=function(){o.classList.remove('va7');o.classList.add('on');va.remove()};va.onerror=va.onended;var q=va.play();q&&q.catch(function(){va.onended()})}else{o.classList.add('on');flamme()}};
+ o.eteint=function(){o.classList.remove('on','va7');if(vb){vb.remove();vb=null}};if(allumee)o.allume();return o}
+// grande bougie du jour (accueil, Aujourd'hui) : même objet, même geste
+document.querySelectorAll('.bigcandle').forEach(function(b){var f=b.querySelector('.flame'),s=b.querySelector('.stick');if(!f)return;var o=objet(b.classList.contains('on'));f.replaceWith(o);s&&s.remove();b.classList.add('bc7');var der=b.classList.contains('on');
+ new MutationObserver(function(){var on=b.classList.contains('on');if(on===der)return;der=on;if(on){o.allume(b.matches(':focus,:hover'));}else o.eteint()}).observe(b,{attributes:true,attributeFilter:['class']});b.addEventListener('click',function(){if(b.classList.contains('on'))son()})});
+// bougie d'une fiche
+function vis(){var v=g('vis7');if(!/^[0-9a-f]{32}$/.test(v||'')){v=Array.from(crypto.getRandomValues(new Uint8Array(16)),function(x){return('0'+x.toString(16)).slice(-2)}).join('');p('vis7',v)}return v}
+document.querySelectorAll('.bo7').forEach(function(z){var s=z.dataset.s,k='bo7-'+s,on=g(k)==='1',bt=E('button','bt7');bt.type='button';bt.setAttribute('aria-pressed',on);var o=objet(on),lb=E('span','lb7',on?T.o:T.a);bt.append(o,lb);var n=E('p','nb7');n.setAttribute('aria-live','polite');n.textContent=' ';var sh=E('button','pa7',T.s);sh.type='button';sh.hidden=!on;z.append(bt,n,sh);var N=null;
+ function compte(x){N=x;n.textContent=x?T.n(x):T.z}
+ function envoi(){return fetch(API,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({s:s,v:vis()})}).then(function(r){if(!r.ok)throw 0;return r.json()})}
+ var dejaVu=false;function charge(){if(dejaVu)return;dejaVu=true;fetch(API+'?s='+encodeURIComponent(s)).then(function(r){return r.ok?r.json():null}).then(function(d){if(d&&N===null)compte(d.n)}).catch(function(){})}charge();
+ bt.addEventListener('click',function(){if(on)return;on=true;bt.setAttribute('aria-pressed','true');lb.textContent=T.o;o.allume(true);son();p(k,'1');sh.hidden=false;
+  envoi().then(function(d){compte(d.n);z.classList.add('mo7');if(d.premier)premier()}).catch(function(){if(N!==null)compte(N+1)})});
+ function premier(){setTimeout(function(){son(true)},900);var c=E('div','co7');c.setAttribute('role','status');c.innerHTML='<svg viewBox="0 0 100 92" aria-hidden="true"><path pathLength="1" d="M50 86C22 66 8 50 8 31 8 17 18 8 30 8c9 0 16 5 20 13C54 13 61 8 70 8c12 0 22 9 22 23 0 19-14 35-42 55Z"/></svg>';c.appendChild(E('p','',T.p));for(var i=0;i<14&&!RM;i++){var e=E('i');e.style.cssText='--x:'+(Math.random()*240-120).toFixed(0)+'px;--y:'+(-60-Math.random()*150).toFixed(0)+'px;--d:'+(.9+Math.random()*.9).toFixed(2)+'s';c.appendChild(e)}z.appendChild(c);setTimeout(function(){c.classList.add('fi')},6500);setTimeout(function(){c.remove()},7600)}
+ sh.addEventListener('click',function(){var d={title:z.dataset.n,text:T.t+z.dataset.n+(N>1?' · '+T.n(N):''),url:location.origin+location.pathname};if(navigator.share)navigator.share(d).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(d.text+' '+d.url).then(function(){sh.textContent=T.c;setTimeout(function(){sh.textContent=T.s},2200)})})});
+// logo en feu des prototypes (lettres composées par nous, feu filmé) : une fois muet à l'arrivée, puis avec le son au premier toucher
+(function(){var l=window.__logo7;if(!l||RM)return;var sp=l.el.querySelector('.lg7');if(!sp)return;function joue(){var v=vid(B+'logo_'+l.p+'.mp4','','lgv7');v.preload='auto';sp.appendChild(v);v.onplaying=function(){sp.classList.add('fe7')};v.onended=function(){sp.classList.remove('fe7');setTimeout(function(){v.remove()},350)};v.onerror=v.onended;var q=v.play();q&&q.catch(function(){v.remove()})}
+ var vu;try{vu=sessionStorage.getItem('fe7');sessionStorage.setItem('fe7','1')}catch(e){}if(!vu){setTimeout(joue,500);addEventListener('pointerdown',function(e){if(e.target.closest&&e.target.closest('a,button,input,select,.roue7'))return;removeEventListener('pointerdown',ar);joue();son()},{once:true});}function ar(){}})();
+})();
 /* Application installable depuis Chrome (23/11/2026, demande de David). */
 (function(){
   var m=document.querySelector('link[rel=manifest]'),b=document.querySelector('[data-inst]');
