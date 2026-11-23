@@ -950,3 +950,5 @@ main .h3{font:500 clamp(24px,3vw,30px)/1.2 var(--serif);color:var(--ivory);margi
 @media (prefers-reduced-motion:reduce){.co7,.co7 path,.mo7 .nb7{animation:none}}
 .bo7 .ob7{width:150px;height:336px}.bo7 .ob7>*{top:-44px}
 @media (max-width:760px){.hero .candles.hc.ra7{height:128px}}
+.cf7{margin:0 auto;max-width:1180px;padding:0 18px 8px;font:500 20px/1.4 var(--serif);color:var(--gold2)}.cf7:empty{display:none}#cal .hide{display:none!important}
+.vs7{margin:18px 0;padding:4px 20px 6px;border-inline-start:2px solid rgba(201,164,92,.6)}.vs7 p{margin:8px 0}.vs7 p[lang=he]{font-size:21px;line-height:1.75}.vs7 cite{font-style:normal;font-size:14px;color:var(--gold2)}.vs7 cite a{color:inherit}

@@ -357,7 +357,7 @@ var R7=(function(){
 /* Prototypes A et B (23/11/2026, demande de David) : ?proto=a (tefi.la, roue en bas) · ?proto=b (tsadik.live, roue en haut) · ?proto=0 pour quitter. Gardé le temps de la visite. */
 (function(){
   var q=(location.search.match(/[?&]proto=([ab0])/)||[])[1],P;try{if(q)sessionStorage.setItem('proto7',q);P=sessionStorage.getItem('proto7')}catch(e){P=q}
-  if(P!=='a'&&P!=='b')return;var H=document.documentElement,L=H.lang,rtl=H.dir==='rtl';H.classList.add('pr7','pr7'+P);
+  if(!P)P=/(^|\.)tefi\.la$/.test(location.hostname)?'a':/(^|\.)tsadik\.live$/.test(location.hostname)?'b':'';if(P!=='a'&&P!=='b')return;var H=document.documentElement,L=H.lang,rtl=H.dir==='rtl';H.classList.add('pr7','pr7'+P);
   var mn=document.querySelector('.mnav'),br=document.querySelector('.brand');if(!mn)return;
   var T={fr:['Agenda','Rayons','Mon espace','Accueil'],en:['Agenda','Categories','My space','Home'],he:['לוח וזמנים','כל הקטגוריות','האזור האישי','הילולות']}[L]||['Agenda','Rayons','Mon espace','Accueil'];
   var base=br?br.getAttribute('href'):'./',it=[[T[3],base]].concat([].map.call(mn.querySelectorAll('a'),function(a){return [a.textContent.trim(),a.getAttribute('href')]}),[[T[0],base+'agenda/'],[T[1],base+'rayons/'],[T[2],'https://hilloulot.dreamnovamcp.com/']]);
@@ -428,6 +428,21 @@ document.querySelectorAll('.bo7').forEach(function(z){var s=z.dataset.s,k='bo7-'
  function trame(){if(fin)return;if(v.readyState>1){if(c.width!==v.videoWidth){c.width=v.videoWidth;c.height=v.videoHeight;sp.appendChild(c);sp.classList.add('fe7')}x.drawImage(v,0,0);var m=x.getImageData(0,0,c.width,c.height),d=m.data;for(var i=0;i<d.length;i+=4){var h=Math.max(d[i],d[i+1],d[i+2]);if(h<9){d[i+3]=0;continue}var k=255/h;d[i]*=k;d[i+1]*=k;d[i+2]*=k;d[i+3]=h}x.putImageData(m,0,0)}requestAnimationFrame(trame)}
  v.onended=v.onerror=function(){if(fin)return;fin=1;sp.classList.remove('fe7');setTimeout(function(){c.remove()},350)};var q=v.play();q&&q.catch(v.onerror);requestAnimationFrame(trame)}
  var vu;try{vu=sessionStorage.getItem('fe7');sessionStorage.setItem('fe7','1')}catch(e){}if(!vu){setTimeout(joue,500);addEventListener('pointerdown',function(e){if(e.target.closest&&e.target.closest('a,button,input,select,.roue7'))return;removeEventListener('pointerdown',ar);joue();son()},{once:true});}function ar(){}})();
+})();
+
+// Filtres du calendrier : chaque filtre agit sur tout (grandes lignes illustrées comprises), les jours et les mois vides disparaissent, le nombre est dit, et on voit le résultat tout de suite.
+(function(){var cal=document.getElementById('cal');if(!cal)return;var g=document.querySelector('.chips');if(!g)return;var L=document.documentElement.lang,
+T={fr:function(n){return n?n+(n>1?' dates':' date'):'Aucune date dans cette catégorie pour cette période.'},en:function(n){return n?n+(n>1?' dates':' date'):'No date in this category for this period.'},he:function(n){return n?(n===1?'תאריך אחד':n+' תאריכים'):'אין תאריכים בקטגוריה זו בתקופה זו.'}}[L];
+var m=document.createElement('p');m.className='cf7';m.setAttribute('role','status');cal.before(m);
+function applique(f,voir){var n=0;cal.querySelectorAll('.row').forEach(function(r){r.classList.toggle('hide',f!=='all'&&f!=='hil')});
+ cal.querySelectorAll('.ev[data-c]').forEach(function(e){var h=f!=='all'&&e.dataset.c!==f;e.classList.toggle('hide',h);if(!h)n++});
+ cal.querySelectorAll('.dl').forEach(function(d){d.classList.toggle('hide',!d.querySelector('.ev[data-c]:not(.hide)'))});
+ cal.querySelectorAll('.dbd').forEach(function(d){if(f!=='all')d.open=true;d.classList.toggle('hide',!d.querySelector('.dl:not(.hide)'));var s=d.querySelector('summary');if(s){s.dataset.t=s.dataset.t||s.textContent;s.textContent=f==='all'?s.dataset.t:s.dataset.t.replace(/\d+/,d.querySelectorAll('.dl:not(.hide)').length)}});
+ cal.querySelectorAll('.mblock').forEach(function(b){b.classList.toggle('hide',f!=='all'&&!b.querySelector('.row:not(.hide),.dl:not(.hide)'))});
+ m.textContent=f==='all'?'':T(n);cal.querySelectorAll('.rv').forEach(function(x){x.classList.add('in')});window.ScrollTrigger&&ScrollTrigger.refresh();
+ if(voir){var y=m.getBoundingClientRect().top+scrollY-(document.querySelector('.hdr')||{offsetHeight:70}).offsetHeight-(document.documentElement.classList.contains('pr7b')?90:14);scrollTo({top:y,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'})}}
+g.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){applique(b.dataset.f,b.dataset.f!=='all')})});
+var a=g.querySelector('[aria-pressed=true]');if(a&&a.dataset.f!=='all')applique(a.dataset.f);
 })();
 /* Application installable depuis Chrome (23/11/2026, demande de David). */
 (function(){
