@@ -893,3 +893,13 @@ main .h3{font:500 clamp(24px,3vw,30px)/1.2 var(--serif);color:var(--ivory);margi
 .m3d7{margin-inline-start:auto;border:1px solid var(--gold);border-radius:999px;padding:7px 16px;font:600 14px/1 var(--sans);color:var(--gold2);text-decoration:none;align-self:center}
 @media (max-width:640px){.rc7{margin-bottom:18px}}
 .jour7 .acts{margin-top:26px!important}
+/* 23/11 : photo du tsadik du jour en fond, repères sous le héros, application */
+.hero.fond7 .bg img{object-position:50% 22%;filter:saturate(.75) brightness(.62) contrast(1.04);animation:none}
+.hero.fond7 .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,8,15,.5),rgba(6,8,15,.12) 30%,rgba(6,8,15,.55) 62%,rgba(6,8,15,.94))}
+.hero.sab7 .bg img{object-position:50% 46%}
+@media (min-width:900px){.hero.fond7 .bg img{position:absolute;inset:0 0 0 auto;width:min(54%,860px);height:100%;object-position:50% 18%;filter:saturate(.8) brightness(.78);-webkit-mask-image:linear-gradient(90deg,transparent,#000 46%);mask-image:linear-gradient(90deg,transparent,#000 46%)}[dir=rtl] .hero.fond7 .bg img{inset:0 auto 0 0;-webkit-mask-image:linear-gradient(270deg,transparent,#000 46%);mask-image:linear-gradient(270deg,transparent,#000 46%)}
+.hero.fond7 .bg::after{background:linear-gradient(180deg,rgba(6,8,15,.35),transparent 30%,rgba(6,8,15,.2) 70%,rgba(6,8,15,.9))}}
+.cr7{position:absolute;z-index:3;inset-block-start:78px;inset-inline-end:16px;margin:0;font-size:12.5px;color:var(--stone)}.cr7 a{color:inherit}
+@media (max-width:760px){.cr7{inset-block-start:66px;font-size:12px}}
+@media (min-width:641px) and (max-aspect-ratio:4/5){.hero{align-items:flex-start}.hero .in{padding-top:clamp(120px,22vh,460px)}}
+.rep7s{padding:clamp(26px,4vw,48px) 0}.rep7s .rep7{margin-bottom:0;max-width:none}.inst7{margin:20px 0 0}.inst7 .btn[hidden]{display:none}

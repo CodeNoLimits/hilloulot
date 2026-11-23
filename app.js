@@ -321,7 +321,7 @@ var R7=(function(){
   var E=function(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
   var civ=function(i){return new Intl.DateTimeFormat({fr:'fr-FR',en:'en-GB',he:'he-IL'}[L],{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(i+'T12:00:00Z'))};
   fetch(hero.dataset.hil).then(function(r){return r.json()}).then(function(H){
-    var jour=H.filter(function(x){return x.i===iso}).sort(function(a,b){return b.s-a.s}),suite=H.filter(function(x){return x.i>iso}).sort(function(a,b){return a.i<b.i?-1:a.i>b.i?1:b.s-a.s})[0];
+    var jour=H.filter(function(x){return x.i===iso}).sort(function(a,b){return b.w-a.w||b.s-a.s}),suite=H.filter(function(x){return x.i>iso}).sort(function(a,b){return a.i<b.i?-1:a.i>b.i?1:b.w-a.w||b.s-a.s})[0];
     var x=jour[0]||suite; if(!x)return;
     var h1=q('h1'),sp=hero.querySelectorAll('.meta span'),b=q('.acts .btn'),ln=q('.acts .lnk'),k=q('.kick');
     h1.textContent=x.n;h1.removeAttribute('aria-label');h1.classList.remove('st','st-on'); if(q('.hn'))q('.hn').textContent=L==='he'?'':x.h;
@@ -331,8 +331,10 @@ var R7=(function(){
     var cd=q('[data-cd]'),eve=q('.eve');
     if(jour.length){hero.classList.add('jour7');if(cd)cd.hidden=true;if(eve)eve.hidden=true}
     else{if(cd)cd.dataset.cd=x.i+'T00:00:00+02:00';if(eve)eve.textContent=T.rien}
+    var bg=q('.bg img'),ph=x.b||hero.dataset.saba;if(bg&&ph){var pre=new Image();pre.onload=function(){bg.src=ph;hero.classList.add('fond7');hero.classList.toggle('sab7',!x.b)};pre.src=ph}
+    var cr=q('.cr7');if(cr){cr.hidden=false;cr.textContent='';if(x.b){cr.textContent=x.c||''}else{var ca=E('a','',hero.dataset.sabat);ca.href=hero.dataset.sabal;ca.target='_blank';ca.rel='noopener';cr.appendChild(ca)}}
     var ul=E('ul','au7');
-    if(jour.length>1){var li=E('li','au7t',T.aussi);ul.appendChild(li);jour.slice(1,5).forEach(function(y){var l=E('li'),a=E('a','',y.n);a.href=y.u;l.appendChild(a);ul.appendChild(l)})}
+    if(jour.length>1){var li=E('li','au7t',T.aussi);ul.appendChild(li);jour.slice(1,9).forEach(function(y){var l=E('li'),a=E('a','',y.n);a.href=y.u;l.appendChild(a);ul.appendChild(l)})}
     if(jour.length&&suite){var s=E('li','au7s');s.appendChild(E('span','',T.venir+' · '+suite.d.replace(/ 5787| תשפ״ז/,'')+' '));var sa=E('a','',suite.n);sa.href=suite.u;s.appendChild(sa);ul.appendChild(s)}
     var vieux=q('.au7');if(vieux)vieux.remove(); if(ul.children.length)q('.acts').insertAdjacentElement('afterend',ul);
   }).catch(function(){});
@@ -348,4 +350,13 @@ var R7=(function(){
   inp.addEventListener('keydown',function(e){var n=cur.length;if(e.key==='ArrowDown'||e.key==='ArrowUp'){if(!n)return;e.preventDefault();act=(act+(e.key==='ArrowDown'?1:n-1)+(act<0&&e.key==='ArrowUp'?1:0))%n;[].forEach.call(ul.children,function(l,i){l.classList.toggle('on',i===act);l.setAttribute('aria-selected',i===act)});inp.setAttribute('aria-activedescendant','rc7-'+act)}else if(e.key==='Escape'){ul.hidden=true;inp.setAttribute('aria-expanded','false')}});
   f.addEventListener('submit',function(e){e.preventDefault();if(!inp.value.trim())return;charge().then(function(){montre();setTimeout(function(){var x=cur[Math.max(act,0)];if(x)location.href=x.u},60)})});
   document.addEventListener('click',function(e){if(!f.contains(e.target))ul.hidden=true});
+})();
+/* Application installable depuis Chrome (23/11/2026, demande de David). */
+(function(){
+  var m=document.querySelector('link[rel=manifest]'),b=document.querySelector('[data-inst]');
+  if('serviceWorker' in navigator&&m&&location.protocol==='https:'||location.hostname==='127.0.0.1'&&m&&'serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register(new URL('sw.js',m.href).href).catch(function(){})})}
+  if(!b)return;var ev=null,installe=matchMedia('(display-mode: standalone)').matches||navigator.standalone;if(installe)return;
+  addEventListener('beforeinstallprompt',function(e){e.preventDefault();ev=e;b.hidden=false});
+  b.addEventListener('click',function(){if(!ev)return;ev.prompt();ev.userChoice.then(function(){b.hidden=true;ev=null})});
+  addEventListener('appinstalled',function(){b.hidden=true});
 })();
