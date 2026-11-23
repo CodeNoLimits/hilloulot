@@ -354,10 +354,10 @@ var R7=(function(){
   f.addEventListener('submit',function(e){e.preventDefault();if(!inp.value.trim())return;charge().then(function(){montre();setTimeout(function(){var x=cur[Math.max(act,0)];if(x)location.href=x.u},60)})});
   document.addEventListener('click',function(e){if(!f.contains(e.target))ul.hidden=true});
 })();
-/* Prototypes A et B (23/11/2026, demande de David) : ?proto=a (tefi.la, roue en bas) · ?proto=b (tsadik.live, roue en haut) · ?proto=0 pour quitter. Gardé le temps de la visite. */
+/* Roue : en haut par défaut (David, 23/11 19 h 39 : « Le B c'est mieux ») · ?proto=a la met en bas · ?proto=0 pour la retirer. Gardé le temps de la visite. */
 (function(){
   var q=(location.search.match(/[?&]proto=([ab0])/)||[])[1],P;try{if(q)sessionStorage.setItem('proto7',q);P=sessionStorage.getItem('proto7')}catch(e){P=q}
-  if(!P)P=/(^|\.)tefi\.la$/.test(location.hostname)?'a':/(^|\.)tsadik\.live$/.test(location.hostname)?'b':'';if(P!=='a'&&P!=='b')return;var H=document.documentElement,L=H.lang,rtl=H.dir==='rtl';H.classList.add('pr7','pr7'+P);
+  if(!P)P='b';if(P!=='a'&&P!=='b')return;var H=document.documentElement,L=H.lang,rtl=H.dir==='rtl';H.classList.add('pr7','pr7'+P);
   var mn=document.querySelector('.mnav'),br=document.querySelector('.brand');if(!mn)return;
   var T={fr:['Agenda','Rayons','Mon espace','Accueil','Pourquoi ce site'],en:['Agenda','Categories','My space','Home','Why this site'],he:['לוח וזמנים','כל הקטגוריות','האזור האישי','דף הבית','למה הוקם האתר?']}[L]||['Agenda','Rayons','Mon espace','Accueil'];
   var base=br?br.getAttribute('href'):'./',it=[[T[3],base]].concat([].map.call(mn.querySelectorAll('a'),function(a){return [a.textContent.trim(),a.getAttribute('href')]}),[[T[0],base+'agenda/'],[T[1],base+'rayons/'],[T[2],'https://hilloulot.dreamnovamcp.com/'],[T[4],'#pourquoi']]);
