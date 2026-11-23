@@ -239,7 +239,7 @@
     if(!to||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){f.email.focus();return}
     var ok=function(){f.querySelector('.subok').hidden=false};
     if(/^https?:/.test(to)){var fd=new FormData();fd.append('email',em);fd.append('rythme',r);fd.append('langue',document.documentElement.lang);fetch(to,{method:'POST',body:fd,headers:{Accept:'application/json'}}).then(ok).catch(ok)}
-    else{location.href='mailto:'+to+'?subject='+encodeURIComponent('Hilloulot — '+r)+'&body='+encodeURIComponent(em+' · '+r);ok()}});
+    else{location.href='mailto:'+to+'?subject='+encodeURIComponent('Tsadik — '+r)+'&body='+encodeURIComponent(em+' · '+r);ok()}});
 })();
 
 /* v7 reperes */
@@ -383,8 +383,6 @@ var R7=(function(){
   nav.addEventListener('focusin',function(e){if(e.target.matches(':focus-visible'))va(els.indexOf(e.target))});
   nav.addEventListener('keydown',function(e){var d=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;if(!d)return;e.preventDefault();var n=(els.indexOf(document.activeElement)+d*sens+N)%N;els[n].focus({preventScroll:true});va(n)});
   addEventListener('resize',rendu);rendu();
-  // logo
-  if(br){var sp=br.querySelector('.lg7');if(!sp){br.textContent='';sp=document.createElement('span');sp.className='lg7';sp.textContent='tsadik.live';var by=document.createElement('small');by.className='by7';by.textContent='by tefi.la';br.append(sp,by)}br.setAttribute('aria-label','tsadik.live');window.__logo7={el:br,nom:'tsadik.live',p:'b',rm:rm}}
 })();
 
 // Bougies : rangée filmée dans les bandeaux, bougie à allumer sur chaque fiche (compteur gardé par hilloulot.dreamnovamcp.com), son au toucher seulement.
@@ -423,7 +421,7 @@ document.querySelectorAll('.bo7').forEach(function(z){var s=z.dataset.s,k='bo7-'
  function premier(){setTimeout(function(){son(true)},900);var c=E('div','co7');c.setAttribute('role','status');c.innerHTML='<svg viewBox="0 0 100 92" aria-hidden="true"><path pathLength="1" d="M50 86C22 66 8 50 8 31 8 17 18 8 30 8c9 0 16 5 20 13C54 13 61 8 70 8c12 0 22 9 22 23 0 19-14 35-42 55Z"/></svg>';c.appendChild(E('p','',T.p));for(var i=0;i<14&&!RM;i++){var e=E('i');e.style.cssText='--x:'+(Math.random()*240-120).toFixed(0)+'px;--y:'+(-60-Math.random()*150).toFixed(0)+'px;--d:'+(.9+Math.random()*.9).toFixed(2)+'s';c.appendChild(e)}z.appendChild(c);setTimeout(function(){c.classList.add('fi')},6500);setTimeout(function(){c.remove()},7600)}
  sh.addEventListener('click',function(){var d={title:z.dataset.n,text:T.t+z.dataset.n+(N>1?' · '+T.n(N):''),url:location.origin+location.pathname};if(navigator.share)navigator.share(d).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(d.text+' '+d.url).then(function(){sh.textContent=T.c;setTimeout(function(){sh.textContent=T.s},2200)})})});
 // logo en feu des prototypes (lettres composées par nous, feu filmé) : une fois muet à l'arrivée, puis avec le son au premier toucher
-(function(){var l=window.__logo7;if(!l||RM)return;var sp=l.el.querySelector('.lg7');if(!sp)return;function joue(){var v=vid(B+'logo_'+l.p+'.mp4','');v.preload='auto';var c=E('canvas','lgv7'),x=c.getContext('2d',{willReadFrequently:true}),fin=0;c.setAttribute('aria-hidden','true');
+(function(){if(RM)return;var sp=document.querySelector('.hdr .brand .lg7');if(!sp)return;function joue(){var v=vid(B+'logo_'+(L==='he'?'he':'fr')+'.mp4','');v.preload='auto';var c=E('canvas','lgv7'),x=c.getContext('2d',{willReadFrequently:true}),fin=0;c.setAttribute('aria-hidden','true');
  // le noir devient transparent : l'en-tête isole le mode « écran », un rectangle noir se voyait
  function trame(){if(fin)return;if(v.readyState>1){if(c.width!==v.videoWidth){c.width=v.videoWidth;c.height=v.videoHeight;sp.appendChild(c);sp.classList.add('fe7')}x.drawImage(v,0,0);var m=x.getImageData(0,0,c.width,c.height),d=m.data;for(var i=0;i<d.length;i+=4){var h=Math.max(d[i],d[i+1],d[i+2]);if(h<9){d[i+3]=0;continue}var k=255/h;d[i]*=k;d[i+1]*=k;d[i+2]*=k;d[i+3]=h}x.putImageData(m,0,0)}requestAnimationFrame(trame)}
  v.onended=v.onerror=function(){if(fin)return;fin=1;sp.classList.remove('fe7');setTimeout(function(){c.remove()},350)};var q=v.play();q&&q.catch(v.onerror);requestAnimationFrame(trame)}
