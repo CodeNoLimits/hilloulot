@@ -959,3 +959,7 @@ main .h3{font:500 clamp(24px,3vw,30px)/1.2 var(--serif);color:var(--ivory);margi
 .pfx7{all:unset;box-sizing:border-box;position:absolute;z-index:2;top:8px;inset-inline-end:8px;width:48px;height:48px;text-align:center;font:300 34px/46px var(--serif);color:var(--gold2);cursor:pointer}.pfx7:focus-visible{outline:2px solid var(--gold2);outline-offset:-4px}.pfo7{margin-top:4px}.pf7l{cursor:pointer}
 @media (prefers-reduced-motion:reduce){.pf7[open]{animation:none}}
 .hero.kot7 .bg img{filter:grayscale(.6) saturate(.6) brightness(var(--kb,.95)) contrast(1.04)}
+.cyl7 a{transition:color .2s,text-shadow .25s}.cyl7 a.col7{text-shadow:0 0 22px rgba(233,205,143,.85)}
+.jg7{position:absolute;left:0;bottom:0;width:100%;height:3px;background:linear-gradient(90deg,var(--gold),#fff0c8);transform:scaleX(0);transform-origin:50% 50%;opacity:0}.len7.att .jg7{opacity:1;transform:scaleX(1);transition:transform .55s linear}.len7.att{background:linear-gradient(180deg,rgba(233,205,143,.24),rgba(233,205,143,.06) 45%,rgba(233,205,143,.2));transition:background .5s}
+.cyl7 a.sur7{color:#fff3d4;cursor:pointer}.cyl7 a::after{content:"";position:absolute;inset-inline:12px;bottom:6px;height:2px;background:var(--gold2);transform:scaleX(0)}.cyl7 a.sur7::after{transform:scaleX(1);transition:transform .65s linear}
+@media (prefers-reduced-motion:reduce){.len7.att .jg7,.cyl7 a.sur7::after,.len7.att{transition:none}}
