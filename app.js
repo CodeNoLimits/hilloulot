@@ -1,4 +1,4 @@
-window.NOM7='tsadikim';
+window.VER7='mwts';window.NOM7='tsadikim';
 (function(){
   var I=window.I18N||{};
   var pad=function(n){return String(n).padStart(2,'0')};
@@ -438,7 +438,7 @@ document.querySelectorAll('.bo7').forEach(function(z){var s=z.dataset.s,k='bo7-'
  bt.addEventListener('click',function(){if(on)return;on=true;bt.setAttribute('aria-pressed','true');lb.textContent=T.o;o.allume(true);son();p(k,'1');sh.hidden=false;
   envoi().then(function(d){compte(d.n);z.classList.add('mo7');if(d.premier)premier()}).catch(function(){if(N!==null)compte(N+1)})});
  function premier(){setTimeout(function(){son(true)},900);var c=E('div','co7');c.setAttribute('role','status');c.innerHTML='<svg viewBox="0 0 100 92" aria-hidden="true"><path pathLength="1" d="M50 86C22 66 8 50 8 31 8 17 18 8 30 8c9 0 16 5 20 13C54 13 61 8 70 8c12 0 22 9 22 23 0 19-14 35-42 55Z"/></svg>';c.appendChild(E('p','',T.p));for(var i=0;i<14&&!RM;i++){var e=E('i');e.style.cssText='--x:'+(Math.random()*240-120).toFixed(0)+'px;--y:'+(-60-Math.random()*150).toFixed(0)+'px;--d:'+(.9+Math.random()*.9).toFixed(2)+'s';c.appendChild(e)}z.appendChild(c);setTimeout(function(){c.classList.add('fi')},6500);setTimeout(function(){c.remove()},7600)}
- sh.addEventListener('click',function(){var d={title:z.dataset.n,text:T.t+z.dataset.n+(N>1?' · '+T.n(N):''),url:location.origin+location.pathname};if(navigator.share)navigator.share(d).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(d.text+' '+d.url).then(function(){sh.textContent=T.c;setTimeout(function(){sh.textContent=T.s},2200)})})});
+ sh.addEventListener('click',function(){var d={title:z.dataset.n,text:T.t+z.dataset.n+(N>1?' · '+T.n(N):''),url:location.origin+location.pathname+'?v='+(window.VER7||1)};if(navigator.share)navigator.share(d).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(d.text+' '+d.url).then(function(){sh.textContent=T.c;setTimeout(function(){sh.textContent=T.s},2200)})})});
 // nom en feu (Mickaël, 23/11 22 h 54) : flammes filmées en image animée, jamais bloquée par le téléphone ; lettres en vrai texte par-dessus
 function feu(el,arret){var i=E('img','feu7');i.alt='';i.decoding='async';i.setAttribute('aria-hidden','true');i.src=B+'feu_'+(window.NOM7||'tsadik')+(L==='he'?'_he':'')+(RM||arret?'_f':'')+'.webp';el.classList.add('fe7');el.appendChild(i);return i}
 document.querySelectorAll('.hdr .brand .lg7').forEach(function(e){feu(e)});
