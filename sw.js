@@ -1,6 +1,6 @@
 /* Application installable : pages d'abord en ligne, dernière version gardée hors ligne ; images et styles gardés. V change à chaque publication. */
-var V='hil-3efe5cda',B=new URL('./',self.location).pathname;
-self.addEventListener('install',function(e){e.waitUntil(caches.open(V).then(function(c){return c.addAll([B+'fr/',B+'fr/hil.json',B+'app.js?v=3efe5cda',B+'style.css?v=3efe5cda',B+'img/app/icon-192.png'])}).catch(function(){}).then(function(){return self.skipWaiting()}))});
+var V='hil-8f9263ce',B=new URL('./',self.location).pathname;
+self.addEventListener('install',function(e){e.waitUntil(caches.open(V).then(function(c){return c.addAll([B+'fr/',B+'fr/hil.json',B+'app.js?v=8f9263ce',B+'style.css?v=8f9263ce',B+'img/app/icon-192.png'])}).catch(function(){}).then(function(){return self.skipWaiting()}))});
 self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(k){return Promise.all(k.filter(function(x){return x.indexOf('hil-')===0&&x!==V}).map(function(x){return caches.delete(x)}))}).then(function(){return self.clients.claim()}))});
 self.addEventListener('fetch',function(e){var r=e.request,u=new URL(r.url);if(r.method!=='GET'||u.origin!==location.origin||u.pathname.indexOf(B)!==0||/\.(mp4|mp3|webm)$/.test(u.pathname)||r.headers.get('range'))return;
   var garde=function(x){if(x&&x.ok&&x.type==='basic'){var k=x.clone();caches.open(V).then(function(c){c.put(r,k)})}return x};
