@@ -916,7 +916,7 @@ main .h3{font:500 clamp(24px,3vw,30px)/1.2 var(--serif);color:var(--ivory);margi
 .cr7{display:none!important}.hero.kot7 .bg img{object-position:30% 40%}
 @media (max-width:640px){.hero .in{padding-top:calc(clamp(84px,13vh,140px) + 58px + 24px)}}
 .crf7{margin:18px 0 0;font-size:12.5px;color:var(--dim)}.crf7 a{color:inherit}
-.gd7{margin-top:44px}.gd7 .agl>div{padding-inline:4px}
+.fete7{margin-top:44px}.fete7 .agl>div{padding-inline:4px}
 /* prototypes : la roue */
 .pr7 .mnav,.pr7 .hdr .nav{display:none!important}
 .roue7{position:fixed;z-index:60;inset-inline:0;height:78px;overflow:hidden;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none;background:linear-gradient(180deg,rgba(10,12,20,.9),rgba(4,5,9,.97));-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);perspective:640px}
@@ -935,4 +935,4 @@ main .h3{font:500 clamp(24px,3vw,30px)/1.2 var(--serif);color:var(--ivory);margi
 .leaflet-container{isolation:isolate}.roue7{z-index:80}
 @media (max-width:760px){.len7{width:min(142px,37vw)}}
 @media (min-width:761px){.roue7::before,.roue7::after{width:10%}}
-.gd7 li>span:last-child,.gd7 dd,.gd7 td:last-child{flex-shrink:0;max-width:56%}
+.fete7 .agl>div>:last-child{flex:0 0 auto;max-width:54%}
