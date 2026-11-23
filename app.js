@@ -1,3 +1,4 @@
+window.NOM7='tsadik';
 (function(){
   var I=window.I18N||{};
   var pad=function(n){return String(n).padStart(2,'0')};
@@ -96,8 +97,8 @@
   }
   // ouverture cinematographique (une fois par visite)
   var it=document.getElementById('intro');
-  if(it){ if(red||ss('intro')){it.remove()} else { sky(it.querySelector('canvas')); ss('intro','1');
-      var close=function(){if(it.classList.contains('out'))return;it.classList.add('out');dispatchEvent(new Event('introdone'));setTimeout(function(){it.remove()},1100)}; it.addEventListener('click',close); setTimeout(close,3400);} }
+  if(it){ if(red||(document.referrer.indexOf(location.origin+'/')===0&&!/reload/.test(((performance.getEntriesByType('navigation')||[])[0]||{}).type))){it.remove()} else { sky(it.querySelector('canvas')); ss('intro','1');
+      var close=function(){if(it.classList.contains('out'))return;it.classList.add('out');dispatchEvent(new Event('introdone'));setTimeout(function(){it.remove()},1100)}; it.addEventListener('click',close); setTimeout(close,5600);} }
   // revelations au defilement
   if(document.documentElement.classList.contains('js-anim')&&'IntersectionObserver' in window){
     var io=new IntersectionObserver(function(es){var k=0;es.forEach(function(e){if(e.isIntersecting){e.target.style.transitionDelay=(k++*70)+'ms';e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -6% 0px'});
@@ -438,12 +439,12 @@ document.querySelectorAll('.bo7').forEach(function(z){var s=z.dataset.s,k='bo7-'
   envoi().then(function(d){compte(d.n);z.classList.add('mo7');if(d.premier)premier()}).catch(function(){if(N!==null)compte(N+1)})});
  function premier(){setTimeout(function(){son(true)},900);var c=E('div','co7');c.setAttribute('role','status');c.innerHTML='<svg viewBox="0 0 100 92" aria-hidden="true"><path pathLength="1" d="M50 86C22 66 8 50 8 31 8 17 18 8 30 8c9 0 16 5 20 13C54 13 61 8 70 8c12 0 22 9 22 23 0 19-14 35-42 55Z"/></svg>';c.appendChild(E('p','',T.p));for(var i=0;i<14&&!RM;i++){var e=E('i');e.style.cssText='--x:'+(Math.random()*240-120).toFixed(0)+'px;--y:'+(-60-Math.random()*150).toFixed(0)+'px;--d:'+(.9+Math.random()*.9).toFixed(2)+'s';c.appendChild(e)}z.appendChild(c);setTimeout(function(){c.classList.add('fi')},6500);setTimeout(function(){c.remove()},7600)}
  sh.addEventListener('click',function(){var d={title:z.dataset.n,text:T.t+z.dataset.n+(N>1?' · '+T.n(N):''),url:location.origin+location.pathname};if(navigator.share)navigator.share(d).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(d.text+' '+d.url).then(function(){sh.textContent=T.c;setTimeout(function(){sh.textContent=T.s},2200)})})});
-// logo en feu des prototypes (lettres composées par nous, feu filmé) : une fois muet à l'arrivée, puis avec le son au premier toucher
-(function(){if(RM)return;var sp=document.querySelector('.hdr .brand .lg7');if(!sp)return;function joue(){var v=vid(B+'logo_'+(L==='he'?'he':'fr')+'.mp4','');v.preload='auto';var c=E('canvas','lgv7'),x=c.getContext('2d',{willReadFrequently:true}),fin=0;c.setAttribute('aria-hidden','true');
- // le noir devient transparent : l'en-tête isole le mode « écran », un rectangle noir se voyait
- function trame(){if(fin)return;if(v.readyState>1){if(c.width!==v.videoWidth){c.width=v.videoWidth;c.height=v.videoHeight;sp.appendChild(c);sp.classList.add('fe7')}x.drawImage(v,0,0);var m=x.getImageData(0,0,c.width,c.height),d=m.data;for(var i=0;i<d.length;i+=4){var h=Math.max(d[i],d[i+1],d[i+2]);if(h<9){d[i+3]=0;continue}var k=255/h;d[i]*=k;d[i+1]*=k;d[i+2]*=k;d[i+3]=h}x.putImageData(m,0,0)}requestAnimationFrame(trame)}
- v.onended=v.onerror=function(){if(fin)return;fin=1;sp.classList.remove('fe7');setTimeout(function(){c.remove()},350)};var q=v.play();q&&q.catch(v.onerror);requestAnimationFrame(trame)}
- var vu;try{vu=sessionStorage.getItem('fe7');sessionStorage.setItem('fe7','1')}catch(e){}if(!vu){setTimeout(joue,500);addEventListener('pointerdown',function(e){if(e.target.closest&&e.target.closest('a,button,input,select,.roue7'))return;removeEventListener('pointerdown',ar);joue();son()},{once:true});}function ar(){}})();
+// nom en feu (Mickaël, 23/11 22 h 54) : flammes filmées en image animée, jamais bloquée par le téléphone ; lettres en vrai texte par-dessus
+function feu(el,arret){var i=E('img','feu7');i.alt='';i.decoding='async';i.setAttribute('aria-hidden','true');i.src=B+'feu_'+(window.NOM7||'tsadik')+(L==='he'?'_he':'')+(RM||arret?'_f':'')+'.webp';el.classList.add('fe7');el.appendChild(i);return i}
+document.querySelectorAll('.hdr .brand .lg7').forEach(function(e){feu(e)});
+// entrée : les bougies s'allument, des étincelles montent, le nom prend feu
+(function(){var it=document.getElementById('intro'),n=it&&it.querySelector('.iname');if(!n)return;var t=n.textContent.trim();n.textContent='';var s=E('span','in7');s.appendChild(E('b','',t));s.appendChild(E('i','',t));n.appendChild(s);feu(s);it.classList.add('en7');
+ for(var k=0;k<22;k++){var e=E('em','et7');e.style.cssText='left:'+(12+76*(k*.618%1)).toFixed(1)+'%;--x:'+((.5-(k*.618%1))*34).toFixed(0)+'vw;animation-delay:'+(1.5+k*.07).toFixed(2)+'s';it.appendChild(e)}})();
 })();
 
 // Filtres du calendrier : chaque filtre agit sur tout (grandes lignes illustrées comprises), les jours et les mois vides disparaissent, le nombre est dit, et on voit le résultat tout de suite.
@@ -469,7 +470,7 @@ function ouvre(){if(d){d.showModal();return}d=E('dialog','pf7');d.setAttribute('
  D.t[L].forEach(function(p,i){var m=p.match(/^\[CITATION (\d)\]$/);if(!m){b.appendChild(E(i?'p':'h2',i?'':'pft7',p)).id=i?'':'pf7t';return}var c=D.c[m[1]-1],q=E('blockquote','pfq7'),h=E('p','',c.he);h.lang='he';h.dir='rtl';q.appendChild(h);if(L==='en'&&c.en){q.appendChild(E('p','pfe7',c.en))}var r=E('cite'),a=E('a','',c.ref[L]);a.href=c.u;a.target='_blank';a.rel='noopener';r.appendChild(a);if(L==='en'&&c.cr)r.appendChild(E('small','',c.cr));q.appendChild(r);b.appendChild(q)});
  b.querySelectorAll('[id=""]').forEach(function(e){e.removeAttribute('id')});var ok=E('button','btn solid pfo7',A[1]);ok.type='button';ok.onclick=function(){d.close()};b.appendChild(ok);d.append(x,b);d.addEventListener('click',function(e){if(e.target===d)d.close()});document.body.appendChild(d);d.showModal();b.scrollTop=0;x.focus({preventScroll:true})}
 window.__pref7=ouvre;document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('[data-pf7],a[href$="#pourquoi"]');if(a){e.preventDefault();ouvre()}});
-if(location.hash==='#pourquoi'){ouvre();return}var vu;try{vu=localStorage.getItem('pf7');localStorage.setItem('pf7','1')}catch(e){vu='1'}if(!vu&&!navigator.webdriver)setTimeout(ouvre,1600);
+if(location.hash==='#pourquoi'){ouvre();return}var vu;try{vu=localStorage.getItem('pf7');localStorage.setItem('pf7','1')}catch(e){vu='1'}if(!vu&&!navigator.webdriver)setTimeout(function(){var it=document.getElementById('intro');if(it&&!it.classList.contains('out'))addEventListener('introdone',function(){setTimeout(ouvre,1500)},{once:true});else ouvre()},1600);
 })();
 /* Application installable depuis Chrome (23/11/2026, demande de David). */
 (function(){
