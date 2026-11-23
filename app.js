@@ -331,8 +331,11 @@ var R7=(function(){
     var cd=q('[data-cd]'),eve=q('.eve');
     if(jour.length){hero.classList.add('jour7');if(cd)cd.hidden=true;if(eve)eve.hidden=true}
     else{if(cd)cd.dataset.cd=x.i+'T00:00:00+02:00';if(eve)eve.textContent=T.rien}
-    var bg=q('.bg img'),ph=x.b||hero.dataset.saba;if(bg&&ph){var pre=new Image();pre.onload=function(){bg.src=ph;hero.classList.add('fond7');hero.classList.toggle('sab7',!x.b)};pre.src=ph}
-    var cr=q('.cr7');if(cr){cr.hidden=false;cr.textContent='';if(x.b){cr.textContent=x.c||''}else{var ca=E('a','',hero.dataset.sabat);ca.href=hero.dataset.sabal;ca.target='_blank';ca.rel='noopener';cr.appendChild(ca)}}
+    // fond : photo du tsadik ; sinon essai comparé 90 % Kotel / 10 % kever de Rabbi Israël, tirage gardé par visiteur
+    var bg=q('.bg img'),g='';if(!x.b){try{g=localStorage.getItem('fond7')}catch(e){}if(g!=='k'&&g!=='s'){g=Math.random()<.9?'k':'s';try{localStorage.setItem('fond7',g)}catch(e){}}var fo=(location.search.match(/[?&]fond=([ks])/)||[])[1];if(fo)g=fo}
+    var ph=x.b||(g==='s'?hero.dataset.saba:hero.dataset.kotel);if(bg&&ph){var pre=new Image();pre.onload=function(){bg.src=ph;hero.classList.add('fond7');hero.classList.toggle('sab7',g==='s');hero.classList.toggle('kot7',g==='k')};pre.src=ph}
+    var cf=document.querySelector('.crf7');if(cf&&g){cf.hidden=false;var ca=cf.querySelector('a');if(g==='s'){ca.textContent=hero.dataset.sabat;ca.href=hero.dataset.sabal}}
+    if(g&&!fo&&!sim&&!navigator.webdriver&&navigator.sendBeacon){var vu=0,t0=document.hidden?0:Date.now(),fini=0,envoi=function(){if(fini)return;if(t0){vu+=Date.now()-t0;t0=0}if(vu<1000)return;fini=1;navigator.sendBeacon('https://hilloulot.dreamnovamcp.com/mesure',JSON.stringify({v:g,s:Math.min(1800,Math.round(vu/1000))}))};document.addEventListener('visibilitychange',function(){if(document.hidden){if(t0){vu+=Date.now()-t0;t0=0}}else if(!fini)t0=Date.now()});addEventListener('pagehide',envoi)}
     var ul=E('ul','au7');
     if(jour.length>1){var li=E('li','au7t',T.aussi);ul.appendChild(li);jour.slice(1,9).forEach(function(y){var l=E('li'),a=E('a','',y.n);a.href=y.u;l.appendChild(a);ul.appendChild(l)})}
     if(jour.length&&suite){var s=E('li','au7s');s.appendChild(E('span','',T.venir+' · '+suite.d.replace(/ 5787| תשפ״ז/,'')+' '));var sa=E('a','',suite.n);sa.href=suite.u;s.appendChild(sa);ul.appendChild(s)}
@@ -350,6 +353,38 @@ var R7=(function(){
   inp.addEventListener('keydown',function(e){var n=cur.length;if(e.key==='ArrowDown'||e.key==='ArrowUp'){if(!n)return;e.preventDefault();act=(act+(e.key==='ArrowDown'?1:n-1)+(act<0&&e.key==='ArrowUp'?1:0))%n;[].forEach.call(ul.children,function(l,i){l.classList.toggle('on',i===act);l.setAttribute('aria-selected',i===act)});inp.setAttribute('aria-activedescendant','rc7-'+act)}else if(e.key==='Escape'){ul.hidden=true;inp.setAttribute('aria-expanded','false')}});
   f.addEventListener('submit',function(e){e.preventDefault();if(!inp.value.trim())return;charge().then(function(){montre();setTimeout(function(){var x=cur[Math.max(act,0)];if(x)location.href=x.u},60)})});
   document.addEventListener('click',function(e){if(!f.contains(e.target))ul.hidden=true});
+})();
+/* Prototypes A et B (23/11/2026, demande de David) : ?proto=a (tefi.la, roue en bas) · ?proto=b (tsadik.live, roue en haut) · ?proto=0 pour quitter. Gardé le temps de la visite. */
+(function(){
+  var q=(location.search.match(/[?&]proto=([ab0])/)||[])[1],P;try{if(q)sessionStorage.setItem('proto7',q);P=sessionStorage.getItem('proto7')}catch(e){P=q}
+  if(P!=='a'&&P!=='b')return;var H=document.documentElement,L=H.lang,rtl=H.dir==='rtl';H.classList.add('pr7','pr7'+P);
+  var mn=document.querySelector('.mnav'),br=document.querySelector('.brand');if(!mn)return;
+  var T={fr:['Agenda','Rayons','Mon espace','Accueil'],en:['Agenda','Categories','My space','Home'],he:['לוח וזמנים','כל הקטגוריות','האזור האישי','הילולות']}[L]||['Agenda','Rayons','Mon espace','Accueil'];
+  var base=br?br.getAttribute('href'):'./',it=[[T[3],base]].concat([].map.call(mn.querySelectorAll('a'),function(a){return [a.textContent.trim(),a.getAttribute('href')]}),[[T[0],base+'agenda/'],[T[1],base+'rayons/'],[T[2],'https://hilloulot.dreamnovamcp.com/']]);
+  var nav=document.createElement('nav');nav.className='roue7';nav.setAttribute('aria-label',br?br.textContent:'');var cyl=document.createElement('div');cyl.className='cyl7';nav.appendChild(cyl);var lens=document.createElement('i');lens.className='len7';lens.setAttribute('aria-hidden','true');nav.appendChild(lens);
+  var ici=location.pathname.replace(/index\.html$/,''),N=it.length,A=360/N,cur=0,els=it.map(function(x,i){var a=document.createElement('a');a.href=x[1];a.textContent=x[0];a.draggable=false;try{if(new URL(a.href).pathname===ici&&new URL(a.href).host===location.host){cur=i;a.setAttribute('aria-current','page')}}catch(e){}cyl.appendChild(a);return a});
+  var tk=[];for(var k=0;k<N*6;k++){var t=document.createElement('s');t.setAttribute('aria-hidden','true');if(k%6===0)t.className='gr';cyl.appendChild(t);tk.push(t)}
+  (P==='b'?document.querySelector('.hdr'):document.body).insertAdjacentElement(P==='b'?'afterend':'beforeend',nav);
+  var ang=-cur*A,v=0,raf=0,dr=null,bouge=0,dern=cur,rm=matchMedia('(prefers-reduced-motion: reduce)').matches,sens=rtl?-1:1;
+  function larg(){return nav.clientWidth}
+  function rendu(){var R=Math.max(196,Math.min(larg()*.54,400)),c=Math.PI/180;
+    els.forEach(function(e,i){var a=((ang+i*A)%360+540)%360-180,x=Math.sin(a*c)*R*sens,z=Math.cos(a*c),k=Math.max(0,z);e.style.transform='translate(-50%,-50%) translateX('+x.toFixed(1)+'px) rotateY('+(a*.82*sens).toFixed(1)+'deg) scale('+(.62+.38*k).toFixed(3)+')';e.style.opacity=k<.12?0:(Math.pow(k,1.15)).toFixed(2);e.style.pointerEvents=k<.3?'none':'';e.classList.toggle('on',Math.abs(a)<A/2)});
+    tk.forEach(function(t,i){var a=((ang+i*A/6)%360+540)%360-180,z=Math.cos(a*c);t.style.transform='translateX('+(Math.sin(a*c)*R*1.02*sens).toFixed(1)+'px)';t.style.opacity=z<.1?0:(z*z*.8).toFixed(2)});
+    var n=((Math.round(-ang/A)%N)+N)%N;if(n!==dern){dern=n;if(dr&&navigator.vibrate)try{navigator.vibrate(5)}catch(e){}}}
+  function but(){return Math.round(ang/A)*A}
+  function pas(){raf=0;if(dr)return;if(Math.abs(v)>.06){ang+=v;v*=.945;if(Math.abs(v)<.9){var b=but();v+=(b-ang)*.018}}else{var d=but()-ang;if(Math.abs(d)<.05){ang=but();v=0;rendu();return}ang+=d*(rm?1:.16);v=0}rendu();raf=requestAnimationFrame(pas)}
+  function va(i){var d=((-i*A-ang)%360+540)%360-180,f=ang+d,s=ang,t0=performance.now();v=0;cancelAnimationFrame(raf);(function g(t){var p=rm?1:Math.min(1,(t-t0)/420),e=1-Math.pow(1-p,3);ang=s+d*e;rendu();if(p<1)raf=requestAnimationFrame(g);else{ang=f;raf=0}})(t0)}
+  nav.addEventListener('pointerdown',function(e){if(e.button)return;dr={x:e.clientX,t:e.timeStamp,id:e.pointerId};bouge=0;v=0;cancelAnimationFrame(raf);raf=0});
+  addEventListener('pointermove',function(e){if(!dr||e.pointerId!==dr.id)return;var dx=e.clientX-dr.x,dt=Math.max(1,e.timeStamp-dr.t);if(!dx)return;bouge+=Math.abs(dx);if(bouge>5&&!nav.hasPointerCapture(e.pointerId))try{nav.setPointerCapture(e.pointerId)}catch(_){}var da=dx*sens*(A/Math.min(128,larg()*.3));ang+=da;v=v*.5+.5*(da*16/dt);dr.x=e.clientX;dr.t=e.timeStamp;rendu()},{passive:true});
+  function fin(e){if(!dr||e.pointerId!==dr.id)return;if(e.timeStamp-dr.t>90)v=0;v=Math.max(-26,Math.min(26,v));dr=null;if(!raf)raf=requestAnimationFrame(pas)}
+  addEventListener('pointerup',fin);addEventListener('pointercancel',fin);
+  nav.addEventListener('click',function(e){var a=e.target.closest('a');if(bouge>5){e.preventDefault();return}if(a&&!a.classList.contains('on')&&e.detail>0){e.preventDefault();va(els.indexOf(a))}},true);
+  nav.addEventListener('wheel',function(e){var d=Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY;e.preventDefault();ang-=d*.12;v=0;rendu();cancelAnimationFrame(raf);raf=requestAnimationFrame(pas)},{passive:false});
+  nav.addEventListener('focusin',function(e){if(e.target.matches(':focus-visible'))va(els.indexOf(e.target))});
+  nav.addEventListener('keydown',function(e){var d=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;if(!d)return;e.preventDefault();var n=(els.indexOf(document.activeElement)+d*sens+N)%N;els[n].focus({preventScroll:true});va(n)});
+  addEventListener('resize',rendu);rendu();
+  // logo
+  if(br){var nom=P==='a'?'tefi.la':'tsadik.live';br.setAttribute('aria-label',nom);br.textContent='';var sp=document.createElement('span');sp.className='lg7';sp.textContent=nom;br.appendChild(sp);window.__logo7={el:br,nom:nom,p:P,rm:rm}}
 })();
 /* Application installable depuis Chrome (23/11/2026, demande de David). */
 (function(){
