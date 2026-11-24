@@ -1,4 +1,4 @@
-window.VER7='mwts';window.NOM7='tsadikim';
+window.VER7='mwu9';window.NOM7='tsadikim';
 (function(){
   var I=window.I18N||{};
   var pad=function(n){return String(n).padStart(2,'0')};
@@ -164,13 +164,13 @@ window.VER7='mwts';window.NOM7='tsadikim';
     var iso=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jerusalem'}).format(new Date());
     var L=window.EVL||{}, TV=window.TV||'', loc=window.LOCALE||lang;
     var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
-    var li=function(e){var b='<span class="evc">'+esc(L[e.c]||e.c)+'</span>'+(e.u?'<a href="'+e.u+'">'+esc(e.t)+'</a>':'<span class="evt">'+esc(e.t)+'</span>')+(e.pl?'<em>'+esc(e.pl)+'</em>':'')+(e.v?'':'<small class="tv">'+esc(TV)+'</small>')+(e.pc?'<small class="pcn">'+esc(e.pc)+'</small>':'');return '<li class="ev c-'+e.c+(e.i?' wi':'')+'" data-c="'+e.c+'">'+(e.i?'<img class="evth" src="/hilloulot/img/th/'+e.i+'.webp" alt="" width="44" height="55" loading="lazy" decoding="async"><div>'+b+'</div>':b)+'</li>'};
+    var li=function(e){var b='<span class="evc">'+esc(L[e.c]||e.c)+'</span>'+(e.u?'<a href="'+e.u+'">'+esc(e.t)+'</a>'+(e.c==='hil'?'<a class="vf7" href="'+e.u+'">'+({fr:'Voir la fiche',en:'See the page',he:'לדף הצדיק'}[lang]||'')+'</a>':''):'<span class="evt">'+esc(e.t)+'</span>')+(e.pl?'<em>'+esc(e.pl)+'</em>':'')+(e.v?'':'<small class="tv">'+esc(TV)+'</small>')+(e.pc?'<small class="pcn">'+esc(e.pc)+'</small>':'');return '<li class="ev c-'+e.c+(e.i?' wi':'')+'" data-c="'+e.c+'">'+(e.i?'<img class="evth" src="/hilloulot/img/th/'+e.i+'.webp" alt="" width="44" height="55" loading="lazy" decoding="async"><div>'+b+'</div>':b)+'</li>'};
     var civ=function(d,o){return new Intl.DateTimeFormat(loc,Object.assign({timeZone:'UTC'},o||{weekday:'long',day:'numeric',month:'long',year:'numeric'})).format(new Date(d+'T12:00:00Z'))};
     fetch('/hilloulot/'+lang+'/days.json').then(function(r){return r.json()}).then(function(D){
-      var day=D[iso]; if(!day)return;
+      for(var k0 in D)D[k0].e=(D[k0].e||[]).filter(function(e){return e.c!=='hil'||e.u});var day=D[iso]; if(!day)return;
       var h=document.querySelector('#thd,[data-today-hd]'); if(h&&day.h)h.textContent=day.h;
       var c=document.querySelector('#tciv,[data-today-civ]'); if(c)c.textContent=civ(iso);
-      var ev=day.e; if(list.hasAttribute('data-today-list'))ev=ev.slice(0,5);
+      var ev=day.e; if(list.hasAttribute('data-today-list'))ev=ev.slice(0,9);
       list.innerHTML=ev.length?ev.map(li).join(''):'<li class="ev none">'+esc(list.dataset.none||'')+'</li>';
       document.querySelectorAll('.bigcandle').forEach(function(b){b.dataset.slug='jour-'+iso;var on=ls('bougie-jour-'+iso)==='1';b.classList.toggle('on',on);b.querySelector('.lb').textContent=on?b.dataset.on:b.dataset.off});
       var wk=document.getElementById('tweek'); if(wk){var out='',d=new Date(iso+'T12:00:00Z');
@@ -250,8 +250,8 @@ window.VER7='mwts';window.NOM7='tsadikim';
   var box=document.querySelector('[data-rep7]'); if(!box||!window.fetch)return;
   var lang=document.documentElement.lang, l=lang, loc=window.LOCALE||l;
   var S={
-    fr:{sh:'Shabbat',tonight:'Ce soir',today:'Aujourd’hui',fri:'Vendredi {d} au soir',rh:'Roch Hodech',one:'1 jour',two:'2 jours',eve:'dès {d} soir',eve0:'dès ce soir',fete:'Prochaine fête',inN:'dans {n} jours',tom:'demain',and:' et '},
-    en:{sh:'Shabbat',tonight:'Tonight',today:'Today',fri:'Friday {d}, evening',rh:'Rosh Chodesh',one:'1 day',two:'2 days',eve:'from {d} evening',eve0:'from this evening',fete:'Next festival',inN:'in {n} days',tom:'tomorrow',and:' and '},
+    fr:{sh:'Shabbat',tonight:'Ce soir',today:'Aujourd’hui',fri:'Vendredi {d} au soir',rh:'Roch Hodech',one:'1 jour',two:'2 jours',eve:'dès le {d} au soir',eve0:'dès ce soir',fete:'Prochaine fête',inN:'dans {n} jours',tom:'demain',and:' et '},
+    en:{sh:'Shabbat',tonight:'Tonight',today:'Today',fri:'Friday {d}, evening',rh:'Rosh Chodesh',one:'1 day',two:'2 days',eve:'from {d} in the evening',eve0:'from this evening',fete:'Next festival',inN:'in {n} days',tom:'tomorrow',and:' and '},
     he:{sh:'שבת',tonight:'הערב',today:'היום',fri:'יום שישי בערב, {d}',rh:'ראש חודש',one:'ראש חודש בן יום אחד',two:'ראש חודש בן יומיים',eve:'מתחיל ב{d} בערב',eve0:'מתחיל הערב',fete:'החג הבא',inN:'בעוד {n} ימים',tom:'מחר',and:' ו'}
   }[l]||null; if(!S)return;
   var t=function(k,v){return S[k].replace(/\{(\w)\}/g,function(_,x){return v[x]})};
@@ -260,8 +260,9 @@ window.VER7='mwts';window.NOM7='tsadikim';
   var add=function(k,n){return new Date(Date.parse(k+'T12:00:00Z')+n*864e5).toISOString().slice(0,10)};
   var fmt=function(k,o){return new Intl.DateTimeFormat(loc,Object.assign({timeZone:'UTC'},o)).format(new Date(k+'T12:00:00Z'))};
   var wd=function(k){return fmt(k,{weekday:'long'})}, dm=function(k){return fmt(k,{weekday:'long',day:'numeric',month:'long'})};
-  var veille=function(k){var v=add(k,-1);return v===iso?S.eve0:t('eve',{d:wd(v)})};
+  var veille=function(k){var v=add(k,-1);return v===iso?S.eve0:t('eve',{d:dm(v)})};
   var dans=function(n){return n===1?S.tom:n===2&&l==='he'?'בעוד יומיים':t('inN',{n:n})};
+  var avant=function(n){return n>1?' · '+dans(n-1):''};  // jours jusqu'au soir où le jour commence (Mickaël, 24/11 : « 2 jours · dès mercredi soir » se lisait « dans 2 jours »)
   var ev=function(D,k,c){return ((D[k]||{}).e||[]).filter(function(e){return e.c===c})[0]};
   var card=function(kick,title,sub,cls){return '<li class="r7 '+cls+'"><small>'+esc(kick)+'</small><b>'+esc(title)+'</b>'+[].concat(sub).map(function(x){return '<span>'+esc(x)+'</span>'}).join('')+'</li>'};
   Promise.all([fetch('/hilloulot/fr/days.json').then(function(r){return r.json()}),l==='fr'?null:fetch('/hilloulot/'+lang+'/days.json').then(function(r){return r.json()})]).then(function(R){
@@ -276,13 +277,13 @@ window.VER7='mwts';window.NOM7='tsadikim';
     if(i<70){var a=k; if(i===0&&ev(F,add(k,-1),'roch_hodech'))a=add(k,-1);
       var b=ev(F,add(a,1),'roch_hodech')?add(a,1):a, nm=(ev(L,a,'roch_hodech')||ev(F,a,'roch_hodech')).t;
       var days=a===b?dm(a):l==='he'?(a.slice(5,7)===b.slice(5,7)?'ימי '+wd(a).replace('יום ','')+' ו'+wd(b).replace('יום ','')+', '+fmt(a,{day:'numeric'})+' ו־'+fmt(b,{day:'numeric',month:'long'}):dm(a)+' ו'+dm(b)):fmt(a,{weekday:'long',day:'numeric'})+S.and+dm(b);
-      var when=iso>=a?S.today+' · '+(a===b?S.one:S.two):(a===b?S.one:S.two)+' · '+veille(a);
+      var when=iso>=a?S.today+' · '+(a===b?S.one:S.two):veille(a)+avant(i);
       out+=card(S.rh,nm.replace(/^(Roch Hodech|Rosh Chodesh|ראש חודש)\s*/,''),[days,when],iso>=a?'r7on':'')}
     // prochaine fête (date du premier jour, elle commence la veille au soir)
     // une « veille de » n'est pas la fête : on prend le premier vrai jour
     for(i=0;i<400;i++){k=add(iso,i);var f0=ev(F,k,'fete');if(f0&&!/^Veille/.test(f0.t))break}
     if(i<400){var e=ev(L,k,'fete')||f0, n=e.t.split(/\s*[(:—]\s*/)[0];
-      out+=card(S.fete,n,i===0?[S.today,dm(k)]:[dm(k),veille(k)+' · '+dans(i)],i===0?'r7on':'')}
+      out+=card(S.fete,n,i===0?[S.today,dm(k)]:[dm(k),veille(k)+avant(i)],i===0?'r7on':'')}
     box.innerHTML=out; box.hidden=false;
   }).catch(function(){});
 })();
@@ -446,6 +447,20 @@ document.querySelectorAll('.hdr .brand .lg7').forEach(function(e){feu(e)});
 (function(){var it=document.getElementById('intro'),n=it&&it.querySelector('.iname');if(!n)return;var t=n.textContent.trim();n.textContent='';var s=E('span','in7');s.appendChild(E('b','',t));s.appendChild(E('i','',t));n.appendChild(s);feu(s);it.classList.add('en7');
  for(var k=0;k<22;k++){var e=E('em','et7');e.style.cssText='left:'+(12+76*(k*.618%1)).toFixed(1)+'%;--x:'+((.5-(k*.618%1))*34).toFixed(0)+'vw;animation-delay:'+(1.5+k*.07).toFixed(2)+'s';it.appendChild(e)}})();
 })();
+
+// Accueil, à la place de « Quinze tsadikim, quinze films » (Mickaël, 24/11 07:17) : les hilloulot de ce soir, de demain, des jours suivants, et celles qui sont passées.
+(function(){var box=document.querySelector('[data-suite7]');if(!box)return;var l=document.documentElement.lang,T={fr:{td:'Aujourd’hui',ts:'Ce soir et demain',ap:'Après-demain',h:'Hier',ah:'Avant-hier',a:'À venir',p:'Passées',v:'Voir la fiche',n:'Pas de hiloula sur le site ce jour-là',c:function(n){return n+(n>1?' tsadikim':' tsadik')}},en:{td:'Today',ts:'Tonight and tomorrow',ap:'In two days',h:'Yesterday',ah:'Two days ago',a:'Coming up',p:'Past',v:'See the page',n:'No hilloula on the site that day',c:function(n){return n+(n>1?' tzaddikim':' tzaddik')}},he:{td:'היום',ts:'הערב ומחר',ap:'מחרתיים',h:'אתמול',ah:'שלשום',a:'ההילולות הבאות',p:'ההילולות שעברו',v:'לדף הצדיק',n:'אין הילולה באתר ביום זה',c:function(n){return n>1?n+' צדיקים':'צדיק אחד'}}}[l];if(!T)return;
+var J=864e5,iso=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jerusalem'}).format(new Date()),add=function(n){return new Date(Date.parse(iso+'T12:00:00Z')+n*J).toISOString().slice(0,10)},civ=function(k){return new Intl.DateTimeFormat(window.LOCALE||l,{timeZone:'UTC',weekday:'long',day:'numeric',month:'long'}).format(new Date(k+'T12:00:00Z'))};
+function E(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+Promise.all(['days','hil'].map(function(f){return fetch('/'+l+'/'+f+'.json').then(function(r){return r.json()})})).then(function(R){var D=R[0],H={};R[1].forEach(function(x){H[x.u]=x});
+ var nav=E('div','su7n'),ba=E('button','',T.a),bp=E('button','',T.p),bande=E('div','su7b'),liste=E('div','su7l'),sens=1;[ba,bp].forEach(function(b){b.type='button';nav.appendChild(b)});bande.setAttribute('role','group');liste.setAttribute('aria-live','polite');box.append(nav,bande,liste);
+ function jours(){var o=[],n;for(n=sens>0?0:1;n<(sens>0?22:22);n++){var k=add(n*sens);if(D[k])o.push([n*sens,k])}return o}
+ function nom(n,k){return n===0?T.td:n===1?T.ts:n===2?T.ap:n===-1?T.h:n===-2?T.ah:civ(k).split(/[ ,]/)[l==='he'?1:0]}
+ function hil(k){return D[k].e.filter(function(e){return e.c==='hil'&&e.u})}
+ function montre(k,b){bande.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});liste.textContent='';var L=hil(k);var t=E('p','su7t',D[k].h+' · '+civ(k));liste.appendChild(t);if(!L.length)liste.appendChild(E('p','su7v',T.n));
+  L.forEach(function(e,i){var x=H[e.u]||{},a=E('a','su7c');a.href=e.u;a.style.setProperty('--i',i);var f=E('span','su7i');if(x.b){var im=E('img');im.src=x.b.replace(/(\/ph\/[^/]+)(?<!_s)\.webp$/,'$1_s.webp');im.alt='';im.loading='lazy';im.decoding='async';im.onerror=function(){this.remove()};f.appendChild(im)}a.appendChild(f);var d=E('span','su7d');d.appendChild(E('b','',e.t));if(l!=='he'&&x.h)d.appendChild(E('span','su7h',x.h)).lang='he';if(x.r)d.appendChild(E('span','su7r',x.r));if(e.pl)d.appendChild(E('small','',e.pl));d.appendChild(E('em','',T.v));a.appendChild(d);liste.appendChild(a)})}
+ function dessine(){ba.setAttribute('aria-pressed',sens>0);bp.setAttribute('aria-pressed',sens<0);bande.textContent='';var P=null;jours().forEach(function(j,i){var n=hil(j[1]).length,b=E('button','su7j');b.type='button';b.append(E('small','',nom(j[0],j[1])),E('b','',D[j[1]].h.replace(/ (5\d{3}|תשפ״[א-ת])$/,'')));var fl=E('span','su7f');fl.setAttribute('aria-hidden','true');for(var q=0;q<Math.min(n,5);q++)fl.appendChild(E('i'));b.append(fl,E('span','su7k',n?T.c(n):'—'));b.onclick=function(){montre(j[1],b);b.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})};bande.appendChild(b);if(!i)P=[j[1],b]});bande.scrollLeft=0;if(P)montre(P[0],P[1])}
+ ba.onclick=function(){sens=1;dessine()};bp.onclick=function(){sens=-1;dessine()};dessine();box.hidden=false}).catch(function(){})})();
 
 // Filtres du calendrier : chaque filtre agit sur tout (grandes lignes illustrées comprises), les jours et les mois vides disparaissent, le nombre est dit, et on voit le résultat tout de suite.
 (function(){var cal=document.getElementById('cal');if(!cal)return;var g=document.querySelector('.chips');if(!g)return;var L=document.documentElement.lang,
