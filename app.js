@@ -1,4 +1,4 @@
-window.VER7='mwu9';window.NOM7='tsadikim';
+window.VER7='mwua';window.NOM7='tsadikim';
 (function(){
   var I=window.I18N||{};
   var pad=function(n){return String(n).padStart(2,'0')};
@@ -459,8 +459,10 @@ Promise.all(['days','hil'].map(function(f){return fetch('/'+l+'/'+f+'.json').the
  function hil(k){return D[k].e.filter(function(e){return e.c==='hil'&&e.u})}
  function montre(k,b){bande.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});liste.textContent='';var L=hil(k);var t=E('p','su7t',D[k].h+' · '+civ(k));liste.appendChild(t);if(!L.length)liste.appendChild(E('p','su7v',T.n));
   L.forEach(function(e,i){var x=H[e.u]||{},a=E('a','su7c');a.href=e.u;a.style.setProperty('--i',i);var f=E('span','su7i');if(x.b){var im=E('img');im.src=x.b.replace(/(\/ph\/[^/]+)(?<!_s)\.webp$/,'$1_s.webp');im.alt='';im.loading='lazy';im.decoding='async';im.onerror=function(){this.remove()};f.appendChild(im)}a.appendChild(f);var d=E('span','su7d');d.appendChild(E('b','',e.t));if(l!=='he'&&x.h)d.appendChild(E('span','su7h',x.h)).lang='he';if(x.r)d.appendChild(E('span','su7r',x.r));if(e.pl)d.appendChild(E('small','',e.pl));d.appendChild(E('em','',T.v));a.appendChild(d);liste.appendChild(a)})}
- function dessine(){ba.setAttribute('aria-pressed',sens>0);bp.setAttribute('aria-pressed',sens<0);bande.textContent='';var P=null;jours().forEach(function(j,i){var n=hil(j[1]).length,b=E('button','su7j');b.type='button';b.append(E('small','',nom(j[0],j[1])),E('b','',D[j[1]].h.replace(/ (5\d{3}|תשפ״[א-ת])$/,'')));var fl=E('span','su7f');fl.setAttribute('aria-hidden','true');for(var q=0;q<Math.min(n,5);q++)fl.appendChild(E('i'));b.append(fl,E('span','su7k',n?T.c(n):'—'));b.onclick=function(){montre(j[1],b);b.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})};bande.appendChild(b);if(!i)P=[j[1],b]});bande.scrollLeft=0;if(P)montre(P[0],P[1])}
+ function dessine(){ba.setAttribute('aria-pressed',sens>0);bp.setAttribute('aria-pressed',sens<0);bande.textContent='';var P=null;jours().forEach(function(j,i){var n=hil(j[1]).length,b=E('button','su7j');b.type='button';b.append(E('small','',nom(j[0],j[1])),E('b','',D[j[1]].h.replace(/ (5\d{3}|תשפ״[א-ת])$/,'')));var fl=E('span','su7f');fl.setAttribute('aria-hidden','true');for(var q=0;q<Math.min(n,5);q++)fl.appendChild(E('i'));b.append(fl,E('span','su7k',n?T.c(n):'—'));b.onclick=function(){montre(j[1],b);b.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})};bande.appendChild(b);if(!P||(sens>0&&i===1))P=[j[1],b]});bande.scrollLeft=0;if(P)montre(P[0],P[1])}
  ba.onclick=function(){sens=1;dessine()};bp.onclick=function(){sens=-1;dessine()};dessine();box.hidden=false}).catch(function(){})})();
+// bouton WhatsApp : libellé en haut de page, puis l'icône seule dès qu'on descend (il ne couvre pas le texte)
+(function(){var w=document.querySelector('.wa7');if(!w)return;var fini=false;setTimeout(function(){fini=true;w.classList.add('petit')},7000);var f=function(){w.classList.toggle('petit',fini||scrollY>260)};addEventListener('scroll',f,{passive:true});f()})();
 
 // Filtres du calendrier : chaque filtre agit sur tout (grandes lignes illustrées comprises), les jours et les mois vides disparaissent, le nombre est dit, et on voit le résultat tout de suite.
 (function(){var cal=document.getElementById('cal');if(!cal)return;var g=document.querySelector('.chips');if(!g)return;var L=document.documentElement.lang,
