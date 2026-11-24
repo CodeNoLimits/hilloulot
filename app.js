@@ -1,4 +1,4 @@
-window.VER7='mwud';window.NOM7='tsadikim';
+window.VER7='mwue';window.NOM7='tsadikim';
 (function(){
   var I=window.I18N||{};
   var pad=function(n){return String(n).padStart(2,'0')};
